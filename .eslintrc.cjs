@@ -13,15 +13,22 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
     },
+    project: "./tsconfig.json",
+    tsconfigRootDir: "./",
   },
   env: {
     browser: true,
     commonjs: true,
     es6: true,
   },
+  plugins: ["@typescript-eslint", "import"],
+  extends: [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+  ],
 
   // Base config
-  extends: ["eslint:recommended"],
+  // extends: ["eslint:recommended"],
 
   overrides: [
     // React
@@ -51,8 +58,12 @@ module.exports = {
       files: ["**/*.{ts,tsx}"],
       plugins: ["@typescript-eslint", "import"],
       parser: "@typescript-eslint/parser",
+      parserOptions: {
+        project: "./tsconfig.json",
+        tsconfigRootDir: "./",
+      },
       settings: {
-        "import/internal-regex": "^~/",
+        "import/internal-regex": "~/",
         "import/resolver": {
           node: {
             extensions: [".ts", ".tsx"],
@@ -66,6 +77,7 @@ module.exports = {
         "plugin:@typescript-eslint/recommended",
         "plugin:import/recommended",
         "plugin:import/typescript",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
       ],
       rules: {
         "no-unused-vars": "off",
@@ -75,12 +87,13 @@ module.exports = {
         "@typescript-eslint/consistent-type-imports": "off",
         "@typescript-eslint/": "off",
         "@typescript-eslint/prefer-const": "off",
+        // "@typescript-eslint/no-unre": "off",
       },
     },
 
     // Node
     {
-      files: [".eslintrc.js"],
+      files: [],
       env: {
         node: true,
       },
