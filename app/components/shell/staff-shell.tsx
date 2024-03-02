@@ -1,14 +1,13 @@
-import { Fragment, ReactNode } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import avatar from '../../images/gifs/avatar.gif'
-import charity from '../../images/gifs/charity.gif'
-import { NavLink, Outlet } from '@remix-run/react'
+import { Fragment, ReactNode } from 'react';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
+import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import charity from '../../images/gifs/charity.gif';
+import { NavLink, Outlet } from '@remix-run/react';
 
 const user = {
   name: 'Leonard Lawson',
   email: 'leonard@example.com',
-  imageUrl: avatar,
+  imageUrl: "",
 }
 const navigation = [
   { name: 'Home', href: '/demo/user', current: true },

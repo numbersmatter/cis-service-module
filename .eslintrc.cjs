@@ -63,7 +63,7 @@ module.exports = {
         tsconfigRootDir: "./",
       },
       settings: {
-        "import/internal-regex": "~/",
+        "import/internal-regex": "^~/",
         "import/resolver": {
           node: {
             extensions: [".ts", ".tsx"],
