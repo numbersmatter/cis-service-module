@@ -17,4 +17,5 @@ export const cis_t_Db = {
   applications: "/nonprofits/cist/applications",
   service_transactions: "/nonprofits/cist/service_transactions",
   foodBoxOrders: "/nonprofits/cist/service_types/food_pantry/food_box_orders",
+  packedFoodBoxes: "/nonprofits/cist/inventory/food_pantry/packed_food_boxes",
 };

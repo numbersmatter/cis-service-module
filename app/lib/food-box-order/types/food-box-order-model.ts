@@ -1,22 +1,15 @@
 import { ServiceTransactionId } from "~/lib/service-transactions/types/service-trans-model";
+import {
+  ItemLine,
+  ValueEstimationProcess,
+  ValueEstimationType,
+} from "~/lib/value-estimation/types/item-estimations";
 
 export type DeliveryMethods =
   | "DoorDash"
   | "Drive-thru"
   | "Pick-up"
   | "Staff-delivery";
-
-type ItemTypes = "packed-box" | "pre-packed-box" | "individual-items" | "other";
-type ValueEstimationType = "exact" | "approximate" | "other";
-type ValueEstimationProcess = "Walmart" | "batch-estimate" | "other";
-
-interface ItemLine {
-  item_name: string;
-  type: ItemTypes;
-  quantity: number;
-  value: number;
-  item_id: string;
-}
 
 export interface FoodBoxOrderDbModel {
   delivery_method: DeliveryMethods;
