@@ -46,7 +46,7 @@ const servicePeriodConverter: FirestoreDataConverter<ServicePeriod> = {
 
 const service_periods_collection = () =>
   getFirestore()
-    .collection(cis_t_Db.servicePeriod)
+    .collection(cis_t_Db.servicePeriods)
     .withConverter(servicePeriodConverter);
 
 const create = async (service_period: ServicePeriod) => {

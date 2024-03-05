@@ -12,7 +12,9 @@ export const dataPoint = <T extends FirebaseFirestore.DocumentData>(
 ) => getFirestore().collection(collectionPath).withConverter(converter<T>());
 
 export const cis_t_Db = {
-  servicePeriod: "/nonprofits/cist/service_periods",
+  servicePeriods: "/nonprofits/cist/service_periods",
   seats: "/nonprofits/cist/seats",
   applications: "/nonprofits/cist/applications",
+  service_transactions: "/nonprofits/cist/service_transactions",
+  foodBoxOrders: "/nonprofits/cist/service_types/food_pantry/food_box_orders",
 };

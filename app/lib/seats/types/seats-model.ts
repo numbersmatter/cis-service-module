@@ -1,8 +1,10 @@
 import { Timestamp } from "firebase-admin/firestore";
 import { ServicePeriodId } from "~/lib/service-periods/types/service-periods-model";
 
+export type SeatId = string;
+
 export interface Seat {
-  id: string;
+  id: SeatId;
   service_period_id: ServicePeriodId;
   application_id: string;
   is_active: boolean;
