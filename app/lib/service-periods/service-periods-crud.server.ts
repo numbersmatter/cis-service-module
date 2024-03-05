@@ -7,7 +7,7 @@ import {
   WithFieldValue,
   getFirestore,
 } from "firebase-admin/firestore";
-import { dataPoint } from "../database/firebase.server";
+import { cis_t_Db, dataPoint } from "../database/firebase.server";
 import {
   ServicePeriod,
   ServicePeriodDbModel,
@@ -46,13 +46,12 @@ const servicePeriodConverter: FirestoreDataConverter<ServicePeriod> = {
 
 const service_periods_collection = () =>
   getFirestore()
-    .collection("service_periods")
+    .collection(cis_t_Db.servicePeriod)
     .withConverter(servicePeriodConverter);
 
-const create = async (service_period: ServicePeriodDbModel) => {
-  const docRef = service_periods_collection().doc();
-  const id = docRef.id;
-  await docRef.set({ ...service_period, id });
+const create = async (service_period: ServicePeriod) => {
+  const collRef = service_periods_collection();
+  const docRef = await collRef.add({ ...service_period });
   return docRef.id;
 };
 
@@ -65,9 +64,20 @@ const update = async (
   id: string,
   service_period: Partial<ServicePeriodDbModel>
 ) => {
-  await service_periods_collection().doc(id).update(service_period);
+  const writeResult = await service_periods_collection()
+    .doc(id)
+    .update(service_period);
+
+  return writeResult;
 };
 
 const remove = async (id: string) => {
   await service_periods_collection().doc(id).delete();
+};
+
+export const servicePeriodsDb = {
+  create,
+  read,
+  update,
+  remove,
 };
