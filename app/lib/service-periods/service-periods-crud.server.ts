@@ -21,8 +21,8 @@ function servicePeriodToDbModel(
     ...servicePeriod,
     start_date: Timestamp.fromDate(servicePeriod.start_date),
     end_date: Timestamp.fromDate(servicePeriod.end_date),
-    created_at: Timestamp.fromDate(servicePeriod.created_at),
-    updated_at: Timestamp.fromDate(servicePeriod.updated_at),
+    created_date: Timestamp.fromDate(servicePeriod.created_date),
+    updated_date: Timestamp.fromDate(servicePeriod.updated_date),
   };
 }
 
@@ -38,8 +38,8 @@ const servicePeriodConverter: FirestoreDataConverter<ServicePeriod> = {
       id: snapshot.id,
       start_date: data.start_date.toDate(),
       end_date: data.end_date.toDate(),
-      created_at: data.created_at.toDate(),
-      updated_at: data.updated_at.toDate(),
+      created_date: data.created_date.toDate(),
+      updated_date: data.updated_date.toDate(),
     };
   },
 };
@@ -73,6 +73,18 @@ const update = async (
 
 const remove = async (id: string) => {
   await service_periods_collection().doc(id).delete();
+};
+
+const getAll = async () => {
+  const snapshot = await service_periods_collection().get();
+  return snapshot.docs.map((doc) => doc.data());
+};
+
+const servicePeriodByProgramId = async (program_id: string) => {
+  const snapshot = await service_periods_collection()
+    .where("program_id", "==", program_id)
+    .get();
+  return snapshot.docs.map((doc) => doc.data());
 };
 
 export const servicePeriodsDb = {

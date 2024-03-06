@@ -10,8 +10,8 @@ export interface ServicePeriod {
   description: string;
   start_date: Date;
   end_date: Date;
-  created_at: Date;
-  updated_at: Date;
+  created_date: Date;
+  updated_date: Date;
   capacity: ServicePeriodCapacity;
   program_id: ProgramId;
 }
@@ -21,8 +21,8 @@ export interface ServicePeriodDbModel {
   description: string;
   start_date: Timestamp;
   end_date: Timestamp;
-  created_at: Timestamp;
-  updated_at: Timestamp;
+  created_date: Timestamp;
+  updated_date: Timestamp;
   capacity: ServicePeriodCapacity;
   program_id: ProgramId;
 }

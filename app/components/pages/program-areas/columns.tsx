@@ -1,5 +1,6 @@
 "use client"
 
+import { Link } from "@remix-run/react"
 import { ColumnDef } from "@tanstack/react-table"
 
 // This type is used to define the shape of our data.
@@ -25,7 +26,13 @@ export const programAreaColumns: ColumnDef<ProgramAreasTableCol>[] = [
     header: "Description",
   },
   {
+    id: "id",
     accessorKey: "id",
-    header: "ID",
-  },
+    header: "Link",
+    cell: ({ row }) => {
+      return (
+        <Link to={`/program-areas/${row.original.id}`}>Link</Link>
+      )
+    }
+  }
 ]

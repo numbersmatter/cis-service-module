@@ -16,3 +16,9 @@ export const getProgramArea = async (id: string | undefined) => {
   }
   return programArea;
 };
+
+export const programAreaDetailsRouteData = async (id: string | undefined) => {
+  const programArea = await getProgramArea(id);
+
+  return { programArea };
+};
