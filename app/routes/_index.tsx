@@ -14,6 +14,7 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   let user = await authenticator.isAuthenticated(request, {
     failureRedirect: "/login",
+    successRedirect: "/staff",
   });
 
   return json({ user });
@@ -56,18 +57,4 @@ export default function Index() {
 }
 
 
-export function ErrorBoundary() {
-  const error = useRouteError();
-  if (isRouteErrorResponse(error)) {
-    const test = error
-    return <RouteError routeError={error} />
-  }
-  else if (error instanceof Error) {
-    return (
-      <StandardError error={error} />
-    );
-  } else {
-    return <h1>Unknown Error</h1>;
-  }
-}
 

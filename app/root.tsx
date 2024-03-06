@@ -7,9 +7,12 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  isRouteErrorResponse,
+  useRouteError,
 } from "@remix-run/react";
 
 import styles from "./tailwind.css";
+import { RouteError, StandardError } from "./components/common/ErrorPages";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
@@ -33,3 +36,19 @@ export default function App() {
     </html>
   );
 }
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+    const test = error
+    return <RouteError routeError={error} />
+  }
+  else if (error instanceof Error) {
+    return (
+      <StandardError error={error} />
+    );
+  } else {
+    return <h1>Unknown Error</h1>;
+  }
+}
+
