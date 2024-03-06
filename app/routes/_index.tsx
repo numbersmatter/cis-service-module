@@ -1,4 +1,6 @@
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import type { MetaFunction } from "@remix-run/node";
+import { authenticator } from "~/lib/auth/auth.server";
 
 export const meta: MetaFunction = () => {
   return [
@@ -6,6 +8,16 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  let user = await authenticator.isAuthenticated(request, {
+    failureRedirect: "/login",
+  });
+
+
+};
+
+
 
 export default function Index() {
   return (

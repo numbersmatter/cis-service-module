@@ -24,7 +24,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export function DemoUserShell({ children }: { children: ReactNode }) {
+export function StaffShell({ children }: { children: ReactNode }) {
   return (
     <>
       {/*
