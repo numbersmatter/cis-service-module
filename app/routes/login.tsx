@@ -13,7 +13,7 @@ import { commitSession, getSession } from "~/lib/auth/sessions.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   let user = await authenticator.isAuthenticated(request, {
-    successRedirect: "/staff",
+    successRedirect: "/",
   });
 
   let session = await getSession(request.headers.get("cookie"));
@@ -40,7 +40,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     AuthStrategies.FORM,
     request,
     {
-      successRedirect: "/staff",
+      successRedirect: "/",
       failureRedirect: "/login",
     }
   )

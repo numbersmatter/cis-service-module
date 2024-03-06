@@ -9,9 +9,9 @@ import { LogoImg } from './company-logo-img';
 
 
 const navigation = [
-  { name: 'Home', href: '/staff', current: true },
-  { name: 'Program Area', href: '/demo/user/program-areas/', current: false },
-  { name: 'Service Support', href: '/demo/user/service/', current: false },
+  { name: 'Home', href: '/', current: true },
+  { name: 'Program Area', href: '/program-areas/', current: false },
+  { name: 'Service Support', href: '/service/', current: false },
 ]
 const userNavigation = [
   // { name: 'Your Profile', href: '/' },

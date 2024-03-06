@@ -20,13 +20,13 @@ export default function RouteComponent() {
 
   return (
     <StaffShell>
-      <div className="bg-slate-400 px-4 py-3 sm:px-6 md:py-6 lg:px-8">
+      <div className="bg-slate-400 px-2 py-2 sm:px-2 md:py-2 lg:px-8">
         {/* Your content */}
         <div className="md:flex md:items-center md:justify-between">
           <div className="min-w-0 flex-1">
-            <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+            <h4 className="text-lg font-bold leading-7 text-gray-900 sm:truncate sm:text-xl sm:tracking-tight">
               CIS-T Staff Member
-            </h2>
+            </h4>
           </div>
           <div className="mt-4 flex md:ml-4 md:mt-0">
             {/* <button
