@@ -1,6 +1,8 @@
+import { Route, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import type { MetaFunction } from "@remix-run/node";
 import { authenticator } from "~/lib/auth/auth.server";
+import { RouteError, StandardError } from "~/components/common/ErrorPages";
 
 export const meta: MetaFunction = () => {
   return [
@@ -52,3 +54,20 @@ export default function Index() {
     </div>
   );
 }
+
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+    const test = error
+    return <RouteError routeError={error} />
+  }
+  else if (error instanceof Error) {
+    return (
+      <StandardError error={error} />
+    );
+  } else {
+    return <h1>Unknown Error</h1>;
+  }
+}
+
