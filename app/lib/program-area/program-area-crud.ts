@@ -7,6 +7,7 @@ const programAreaToDbModel = (programArea: ProgramArea): ProgramAreaDbModel => {
   return {
     name: programArea.name,
     description: programArea.description,
+    status: programArea.status,
     created_date: Timestamp.fromDate(programArea.created_date),
   };
 };
@@ -20,8 +21,9 @@ const programAreaConverter = {
       id: snapshot.id,
       name: data.name,
       description: data.description,
+      status: data.status,
       created_date: (data.created_date as Timestamp).toDate(),
-    };
+    } as ProgramArea;
   },
 };
 
@@ -51,9 +53,16 @@ const remove = async (id: string) => {
   await programAreaCollRef.doc(id).delete();
 };
 
+const getAll = async () => {
+  const programAreaCollRef = programArea_collection();
+  const snapshot = await programAreaCollRef.get();
+  return snapshot.docs.map((doc) => doc.data());
+};
+
 export const programAreaDb = {
   create,
   read,
   update,
   remove,
+  getAll,
 };

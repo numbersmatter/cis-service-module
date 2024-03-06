@@ -48,11 +48,3 @@ export default function RouteComponent() {
     </StaffShell>
   );
 }
-
-export function ErrorBoundary() {
-  const error = useRouteError();
-  if (isRouteErrorResponse(error)) {
-    return <div />
-  }
-  return <div />
-}
