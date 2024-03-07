@@ -39,38 +39,9 @@ export function ServicePeriodHeader({
         </div>
       </div>
       <div className="mt-5 flex lg:ml-4 lg:mt-0">
-        <span className="hidden sm:block">
-          <button
-            type="button"
-            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-          >
-            <PencilIcon className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-            Edit
-          </button>
-        </span>
-
-        <span className="ml-3 hidden sm:block">
-          <button
-            type="button"
-            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-          >
-            <LinkIcon className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
-            View
-          </button>
-        </span>
-
-        <span className="sm:ml-3">
-          <button
-            type="button"
-            className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            <CheckIcon className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" />
-            Publish
-          </button>
-        </span>
 
         {/* Dropdown */}
-        <Menu as="div" className="relative ml-3 sm:hidden">
+        {/* <Menu as="div" className="relative ml-3 sm:hidden">
           <Menu.Button className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-gray-400">
             More
             <ChevronDownIcon className="-mr-1 ml-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -108,7 +79,7 @@ export function ServicePeriodHeader({
               </Menu.Item>
             </Menu.Items>
           </Transition>
-        </Menu>
+        </Menu> */}
       </div>
     </div>
   )
