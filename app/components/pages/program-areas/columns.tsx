@@ -1,5 +1,3 @@
-"use client"
-
 import { Link } from "@remix-run/react"
 import { ColumnDef } from "@tanstack/react-table"
 

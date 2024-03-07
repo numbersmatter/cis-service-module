@@ -29,3 +29,11 @@ export interface ServiceTransactionDbModel {
   service_type: ServiceTransactionType;
   value: ServiceTransactionValue;
 }
+
+export interface ServiceTransactionCreateDbModel {
+  delivered_to: SeatId;
+
+  status: ServiceTransactionStatus;
+  service_type: ServiceTransactionType;
+  value: ServiceTransactionValue;
+}
