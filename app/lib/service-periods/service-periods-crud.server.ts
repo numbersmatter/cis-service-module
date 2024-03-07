@@ -92,4 +92,5 @@ export const servicePeriodsDb = {
   read,
   update,
   remove,
+  getAll,
 };

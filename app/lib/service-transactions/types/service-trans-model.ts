@@ -18,6 +18,7 @@ export interface ServiceTransaction {
   status: ServiceTransactionStatus;
   service_type: ServiceTransactionType;
   value: ServiceTransactionValue;
+  service_period_id: string;
 }
 
 export interface ServiceTransactionDbModel {
@@ -28,6 +29,7 @@ export interface ServiceTransactionDbModel {
   status: ServiceTransactionStatus;
   service_type: ServiceTransactionType;
   value: ServiceTransactionValue;
+  service_period_id: string;
 }
 
 export interface ServiceTransactionCreateDbModel {

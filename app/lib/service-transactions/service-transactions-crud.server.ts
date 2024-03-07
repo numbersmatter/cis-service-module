@@ -36,7 +36,7 @@ function serviceTransactionToDbModel(
     };
   }
 
-  const { service_completed_date, ...rest } = data;
+  const { id, service_completed_date, ...rest } = data;
 
   return {
     ...rest,
@@ -80,8 +80,9 @@ const service_transactions_collection = () =>
     .withConverter(serviceTransactionConverter);
 
 const create = async (serviceTransaction: ServiceTransaction) => {
+  const { id, ...rest } = serviceTransaction;
   const colRef = service_transactions_collection();
-  const docRef = await colRef.add({ ...serviceTransaction });
+  const docRef = await colRef.add(serviceTransaction);
   return docRef.id;
 };
 

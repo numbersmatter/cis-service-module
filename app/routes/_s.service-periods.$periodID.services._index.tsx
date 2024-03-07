@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { SectionHeaderWithAddAction } from "~/components/common/section-headers";
 import { DataTable } from "~/components/display/data-table";
 import { ServicePeriodTabs } from "~/components/pages/service-periods/headers";
@@ -30,10 +30,10 @@ export default function Route() {
 
 export function ActionButton({ title, }: { title: string, }) {
   return (
-    <button
+    <Link to="add"
       className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
     >
       {title}
-    </button>
+    </Link>
   )
 }
