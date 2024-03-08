@@ -36,7 +36,7 @@ function serviceTransactionToDbModel(
     };
   }
 
-  const { service_completed_date, ...rest } = data;
+  const { id, service_completed_date, ...rest } = data;
 
   return {
     ...rest,
@@ -80,8 +80,9 @@ const service_transactions_collection = () =>
     .withConverter(serviceTransactionConverter);
 
 const create = async (serviceTransaction: ServiceTransaction) => {
+  const { id, ...rest } = serviceTransaction;
   const colRef = service_transactions_collection();
-  const docRef = await colRef.add({ ...serviceTransaction });
+  const docRef = await colRef.add(serviceTransaction);
   return docRef.id;
 };
 
@@ -104,9 +105,32 @@ const remove = async (id: string) => {
   await service_transactions_collection().doc(id).delete();
 };
 
+type OpStr =
+  | "=="
+  | "!="
+  | "<"
+  | "<="
+  | ">"
+  | ">="
+  | "array-contains"
+  | "in"
+  | "array-contains-any";
+
+const queryByField = async (
+  fieldName: keyof ServiceTransactionDbModel,
+  opStr: OpStr,
+  value: string
+) => {
+  const querySnapshot = await service_transactions_collection()
+    .where(fieldName, "==", value)
+    .get();
+  return querySnapshot.docs.map((doc) => doc.data());
+};
+
 export const serviceTransactionsDb = {
   create,
   read,
   update,
   remove,
+  queryByField,
 };

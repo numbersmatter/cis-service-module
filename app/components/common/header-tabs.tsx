@@ -16,25 +16,35 @@ import { NavLink, useNavigate } from '@remix-run/react'
 
 
 
-export function ServicePeriodHeader({
-  programName, servicePeriodName, programAreaName
+export interface TabOption {
+  name: string, to: string, end: boolean
+}
+
+const tabs: TabOption[] = [
+  { name: 'Overview', to: '', end: true },
+  { name: 'Seats', to: 'seats', end: false },
+  { name: 'Services', to: 'services', end: false },
+]
+
+export function SectionHeader({
+  title, text2, text3
 }: {
-  programName: string, servicePeriodName: string, programAreaName: string
+  title: string, text2: string, text3: string
 }) {
   return (
     <div className="py-4 lg:flex lg:items-center lg:justify-between">
       <div className="min-w-0 flex-1">
         <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-          {programName}
+          {title}
         </h2>
         <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
           <div className="mt-2 flex items-center text-sm text-gray-500">
             <BriefcaseIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-            {servicePeriodName}
+            {text2}
           </div>
           <div className="mt-2 flex items-center text-sm text-gray-500">
             <MapPinIcon className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-            {programAreaName}
+            {text3}
           </div>
         </div>
       </div>
@@ -85,22 +95,11 @@ export function ServicePeriodHeader({
   )
 }
 
-interface TabOption {
-  name: string, to: string, end: boolean
-}
 
-const tabs: TabOption[] = [
-  { name: 'Overview', to: '', end: true },
-  { name: 'Seats', to: 'seats', end: false },
-  { name: 'Services', to: 'services', end: false },
-]
-
-
-
-export function ServicePeriodTabs({
-  defaultTab, baseUrl
+export function HeaderTabs({
+  tabs, defaultTab, baseUrl
 }: {
-  defaultTab: string, baseUrl: string
+  tabs: TabOption[], defaultTab: string, baseUrl: string
 }) {
   const defaultTabObj = tabs.find((tab) => tab.to === defaultTab)
 

@@ -61,7 +61,7 @@ const queryBy = async (field: keyof Program, value: string) => {
   return snapshot.docs.map((doc) => doc.data());
 };
 
-export const programDb = {
+export const programsDb = {
   create,
   read,
   update,

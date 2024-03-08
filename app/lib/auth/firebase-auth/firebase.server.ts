@@ -49,6 +49,7 @@ if (getServerApps().length === 0) {
       const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
       config = {
         credential: serverCert(serviceAccount),
+        storageBucket: `${process.env.PROJECT_ID}.appspot.com`,
       };
     } catch {
       throw Error("Invalid SERVICE_ACCOUNT environment variable");
