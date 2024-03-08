@@ -3,7 +3,7 @@ import { useLoaderData } from "@remix-run/react";
 import { programsDb } from "~/lib/programs/programs-crud.server";
 import ProgramAreaDetails from "~/components/pages/program-areas/program-area-details";
 import { protectedRoute } from "~/lib/auth/auth.server";
-import { getProgramArea } from "~/lib/program-area/business-logic/domain";
+import { getProgramArea } from "~/lib/program-area/business-logic/domain.server";
 import { DataTable } from "~/components/display/data-table";
 import { programsOfAreaColumns } from "~/lib/programs/tables";
 

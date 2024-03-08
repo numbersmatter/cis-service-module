@@ -5,9 +5,9 @@ import { z } from "zod"
 import { Label } from "~/components/shadcn/ui/label";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { RemixForm } from "~/lib/remix-forms/form"
-import { servicePeriodExists } from "~/lib/service-periods/domain-logic/checks";
+import { servicePeriodExists } from "~/lib/service-periods/domain-logic/checks.server";
 import { ServicePeriodId } from "~/lib/service-periods/types/service-periods-model";
-import { addFromPeriod, recordServiceMutation } from "~/lib/service-transactions/domain-logic/mutations";
+import { addFromPeriod, recordServiceMutation } from "~/lib/service-transactions/domain-logic/mutations.server";
 
 
 
