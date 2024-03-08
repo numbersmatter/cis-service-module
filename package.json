@@ -11,7 +11,6 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@google-cloud/storage": "^7.7.0",
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
     "@hookform/resolvers": "^3.3.4",
@@ -39,7 +38,6 @@
     "remix-forms": "^2.2.1",
     "remix-hook-form": "^4.2.0",
     "remix-validated-form": "^5.1.5",
-    "stream": "^0.0.2",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4",
