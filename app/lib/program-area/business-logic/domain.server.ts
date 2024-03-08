@@ -1,4 +1,4 @@
-import { programAreaDb } from "../program-area-crud";
+import { programAreaDb } from "../program-area-crud.server";
 
 export const getProgramAreas = async () => {
   const programAreas = await programAreaDb.getAll();

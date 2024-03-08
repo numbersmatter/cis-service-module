@@ -2,7 +2,7 @@ import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import ProgramAreaDetails from "~/components/pages/program-areas/program-area-details";
 import { protectedRoute } from "~/lib/auth/auth.server";
-import { getProgramArea } from "~/lib/program-area/business-logic/domain";
+import { getProgramArea } from "~/lib/program-area/business-logic/domain.server";
 
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
