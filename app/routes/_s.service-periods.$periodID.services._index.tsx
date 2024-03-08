@@ -28,6 +28,7 @@ export default function Route() {
       id: service.id,
       delivered_to: service.delivered_to,
       status: service.status,
+      created_date: service.service_created_data,
     }
 
   })

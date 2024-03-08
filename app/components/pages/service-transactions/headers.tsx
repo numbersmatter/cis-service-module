@@ -3,12 +3,18 @@ import { Menu, Transition } from '@headlessui/react'
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { classNames } from '~/lib'
 import grocery from "~/images/gifs/grocery.gif"
+import { Link } from '@remix-run/react'
+
+import { ServiceTransaction } from '~/lib/service-transactions/types/service-trans-model'
 
 
-export default function ServiceTransactionHeader({
-  serviceID }: {
-    serviceID: string
-  }) {
+export default function ServiceTransactionHeader(
+  {
+    service
+  }: {
+    service: ServiceTransaction
+  }
+) {
   return (
     <div className="px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto flex items-center justify-between gap-x-8 lg:mx-0">
@@ -20,7 +26,7 @@ export default function ServiceTransactionHeader({
           />
           <h1>
             <div className="text-sm leading-6 text-gray-500">
-              Service Transaction ID: <span className="text-gray-700">{serviceID}</span>
+              Service Transaction ID: <span className="text-gray-700">{service.id}</span>
             </div>
             <div className="mt-1 text-base font-semibold leading-6 text-gray-900">
               Food Box Delivery
@@ -28,9 +34,9 @@ export default function ServiceTransactionHeader({
           </h1>
         </div>
         <div className="flex items-center gap-x-4 sm:gap-x-6">
-          <button type="button" className="hidden text-sm font-semibold leading-6 text-gray-900 sm:block">
-            Copy URL
-          </button>
+          <Link to={`/service-periods/${service.service_period_id}/services`} type="button" className="hidden text-sm font-semibold leading-6 text-gray-900 sm:block">
+            Back to Service Period
+          </Link>
           <a href="#" className="hidden text-sm font-semibold leading-6 text-gray-900 sm:block">
             Edit
           </a>
