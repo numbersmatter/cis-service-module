@@ -80,7 +80,7 @@ const getAll = async () => {
   return snapshot.docs.map((doc) => doc.data());
 };
 
-const servicePeriodByProgramId = async (program_id: string) => {
+const byProgramId = async (program_id: string) => {
   const snapshot = await service_periods_collection()
     .where("program_id", "==", program_id)
     .get();
@@ -93,4 +93,5 @@ export const servicePeriodsDb = {
   update,
   remove,
   getAll,
+  byProgramId,
 };

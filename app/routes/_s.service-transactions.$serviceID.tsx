@@ -6,32 +6,31 @@ import { useLoaderData } from "@remix-run/react";
 import { CalendarDaysIcon, CreditCardIcon } from "lucide-react";
 import { Fragment, useState } from "react";
 import { ContainerPadded } from "~/components/common/containers";
+import { AddItemDialog } from "~/components/common/form-dialog";
 import ServiceTransactionHeader from "~/components/pages/service-transactions/headers";
 import { classNames } from "~/lib";
 import { protectedRoute } from "~/lib/auth/auth.server";
+import { FoodBoxOrder } from "~/lib/food-box-order/types/food-box-order-model";
 import { serviceTransactionsDb } from "~/lib/service-transactions/service-transactions-crud.server";
 
-const invoice = {
-  subTotal: '$8,800.00',
-  tax: '$1,760.00',
-  total: '$10,560.00',
+const foodBoxRequest: FoodBoxOrder = {
+  id: "1",
+  value: 0,
+  photo_url: "",
+  notes: "",
+  value_estimation_process: "other",
+  value_estimation_type: "other",
+  delivery_method: 'DoorDash',
   items: [
     {
-      id: 1,
-      title: 'Logo redesign',
-      description: 'New logo and digital asset playbook.',
-      hours: '20.0',
-      rate: '$100.00',
-      price: '$2,000.00',
+      item_id: "1",
+      item_name: "Packed Box",
+      value: 0,
+      quantity: 1,
+      type: "packed-box"
+
     },
-    {
-      id: 2,
-      title: 'Website redesign',
-      description: 'Design and program new company website.',
-      hours: '52.0',
-      rate: '$100.00',
-      price: '$5,200.00',
-    },
+
   ],
 }
 
@@ -44,7 +43,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     return redirect("/service-transactions");
   }
 
-  const lineItems = invoice
+  const lineItems = foodBoxRequest
 
   return json({ serviceID, service, lineItems });
 };
@@ -123,7 +122,7 @@ export default function ServiceTransactionServiceIDRoute() {
             </div>
           </div>
 
-          {/* Invoice */}
+          {/* Food Box Request */}
           <div className="-mx-4 px-4 py-8 shadow-sm ring-1 ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-8 sm:pb-14 lg:col-span-2 lg:row-span-2 lg:row-end-2 xl:px-16 xl:pb-20 xl:pt-16">
             <h2 className="text-base font-semibold leading-6 text-gray-900">
               Transaction
@@ -192,251 +191,38 @@ export default function ServiceTransactionServiceIDRoute() {
                 </tr>
               </thead>
               <tbody>
-                {invoice.items.map((item) => (
-                  <tr key={item.id} className="border-b border-gray-100">
+                {foodBoxRequest.items.map((item) => (
+                  <tr key={item.item_id} className="border-b border-gray-100">
                     <td className="max-w-0 px-0 py-5 align-top">
-                      <div className="truncate font-medium text-gray-900">{item.title}</div>
-                      <div className="truncate text-gray-500">{item.description}</div>
+                      <div className="truncate font-medium text-gray-900">
+                        {item.item_name}
+                      </div>
+                      <div className="truncate text-gray-500">
+                        {item.item_name}
+                      </div>
                     </td>
                     <td className="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">
-                      {item.hours}
+                      {item.type}
                     </td>
                     <td className="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">
-                      {item.rate}
+                      {item.quantity}
                     </td>
-                    <td className="py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700">{item.price}</td>
+                    <td className="py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700">{item.value}</td>
                   </tr>
                 ))}
+                <div className="mt-6 border-t border-gray-900/5 pt-6">
+                  <AddItemDialog />
+                </div>
               </tbody>
-              {/* <tfoot>
-                <tr>
-                  <th scope="row" className="px-0 pb-0 pt-6 font-normal text-gray-700 sm:hidden">
-                    Subtotal
-                  </th>
-                  <th
-                    scope="row"
-                    colSpan={3}
-                    className="hidden px-0 pb-0 pt-6 text-right font-normal text-gray-700 sm:table-cell"
-                  >
-                    Subtotal
-                  </th>
-                  <td className="pb-0 pl-8 pr-0 pt-6 text-right tabular-nums text-gray-900">{invoice.subTotal}</td>
-                </tr>
-                <tr>
-                  <th scope="row" className="pt-4 font-normal text-gray-700 sm:hidden">
-                    Tax
-                  </th>
-                  <th
-                    scope="row"
-                    colSpan={3}
-                    className="hidden pt-4 text-right font-normal text-gray-700 sm:table-cell"
-                  >
-                    Tax
-                  </th>
-                  <td className="pb-0 pl-8 pr-0 pt-4 text-right tabular-nums text-gray-900">{invoice.tax}</td>
-                </tr>
-                <tr>
-                  <th scope="row" className="pt-4 font-semibold text-gray-900 sm:hidden">
-                    Total
-                  </th>
-                  <th
-                    scope="row"
-                    colSpan={3}
-                    className="hidden pt-4 text-right font-semibold text-gray-900 sm:table-cell"
-                  >
-                    Total
-                  </th>
-                  <td className="pb-0 pl-8 pr-0 pt-4 text-right font-semibold tabular-nums text-gray-900">
-                    {invoice.total}
-                  </td>
-                </tr>
-              </tfoot> */}
             </table>
           </div>
 
           <div className="lg:col-start-3">
             {/* Activity feed */}
             <h2 className="text-sm font-semibold leading-6 text-gray-900">Activity</h2>
-            {/* <ul role="list" className="mt-6 space-y-6">
-              {activity.map((activityItem, activityItemIdx) => (
-                <li key={activityItem.id} className="relative flex gap-x-4">
-                  <div
-                    className={classNames(
-                      activityItemIdx === activity.length - 1 ? 'h-6' : '-bottom-6',
-                      'absolute left-0 top-0 flex w-6 justify-center'
-                    )}
-                  >
-                    <div className="w-px bg-gray-200" />
-                  </div>
-                  {activityItem.type === 'commented' ? (
-                    <>
-                      <img
-                        src={activityItem.person.imageUrl}
-                        alt=""
-                        className="relative mt-3 h-6 w-6 flex-none rounded-full bg-gray-50"
-                      />
-                      <div className="flex-auto rounded-md p-3 ring-1 ring-inset ring-gray-200">
-                        <div className="flex justify-between gap-x-4">
-                          <div className="py-0.5 text-xs leading-5 text-gray-500">
-                            <span className="font-medium text-gray-900">{activityItem.person.name}</span> commented
-                          </div>
-                          <time
-                            dateTime={activityItem.dateTime}
-                            className="flex-none py-0.5 text-xs leading-5 text-gray-500"
-                          >
-                            {activityItem.date}
-                          </time>
-                        </div>
-                        <p className="text-sm leading-6 text-gray-500">{activityItem.comment}</p>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="relative flex h-6 w-6 flex-none items-center justify-center bg-white">
-                        {activityItem.type === 'paid' ? (
-                          <CheckCircleIcon className="h-6 w-6 text-indigo-600" aria-hidden="true" />
-                        ) : (
-                          <div className="h-1.5 w-1.5 rounded-full bg-gray-100 ring-1 ring-gray-300" />
-                        )}
-                      </div>
-                      <p className="flex-auto py-0.5 text-xs leading-5 text-gray-500">
-                        <span className="font-medium text-gray-900">{activityItem.person.name}</span>{' '}
-                        {activityItem.type} the invoice.
-                      </p>
-                      <time
-                        dateTime={activityItem.dateTime}
-                        className="flex-none py-0.5 text-xs leading-5 text-gray-500"
-                      >
-                        {activityItem.date}
-                      </time>
-                    </>
-                  )}
-                </li>
-              ))}
-            </ul> */}
-
-            {/* New comment form */}
-            {/* <div className="mt-6 flex gap-x-3">
-              <img
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
-                className="h-6 w-6 flex-none rounded-full bg-gray-50"
-              />
-              <form action="#" className="relative flex-auto">
-                <div className="overflow-hidden rounded-lg pb-12 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
-                  <label htmlFor="comment" className="sr-only">
-                    Add your comment
-                  </label>
-                  <textarea
-                    rows={2}
-                    name="comment"
-                    id="comment"
-                    className="block w-full resize-none border-0 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                    placeholder="Add your comment..."
-                    defaultValue={''}
-                  />
-                </div>
-
-                <div className="absolute inset-x-0 bottom-0 flex justify-between py-2 pl-3 pr-2">
-                  <div className="flex items-center space-x-5">
-                    <div className="flex items-center">
-                      <button
-                        type="button"
-                        className="-m-2.5 flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500"
-                      >
-                        <PaperClipIcon className="h-5 w-5" aria-hidden="true" />
-                        <span className="sr-only">Attach a file</span>
-                      </button>
-                    </div>
-                    <div className="flex items-center">
-                      <Listbox value={selected} onChange={setSelected}>
-                        {({ open }) => (
-                          <>
-                            <Listbox.Label className="sr-only">Your mood</Listbox.Label>
-                            <div className="relative">
-                              <Listbox.Button className="relative -m-2.5 flex h-10 w-10 items-center justify-center rounded-full text-gray-400 hover:text-gray-500">
-                                <span className="flex items-center justify-center">
-                                  {selected.value === null ? (
-                                    <span>
-                                      <FaceSmileIcon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
-                                      <span className="sr-only">Add your mood</span>
-                                    </span>
-                                  ) : (
-                                    <span>
-                                      <span
-                                        className={classNames(
-                                          selected.bgColor,
-                                          'flex h-8 w-8 items-center justify-center rounded-full'
-                                        )}
-                                      >
-                                        <selected.icon
-                                          className="h-5 w-5 flex-shrink-0 text-white"
-                                          aria-hidden="true"
-                                        />
-                                      </span>
-                                      <span className="sr-only">{selected.name}</span>
-                                    </span>
-                                  )}
-                                </span>
-                              </Listbox.Button>
-
-                              <Transition
-                                show={open}
-                                as={Fragment}
-                                leave="transition ease-in duration-100"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                              >
-                                <Listbox.Options className="absolute z-10 -ml-6 mt-1 w-60 rounded-lg bg-white py-3 text-base shadow ring-1 ring-black ring-opacity-5 focus:outline-none sm:ml-auto sm:w-64 sm:text-sm">
-                                  {moods.map((mood) => (
-                                    <Listbox.Option
-                                      key={mood.value}
-                                      className={({ active }) =>
-                                        classNames(
-                                          active ? 'bg-gray-100' : 'bg-white',
-                                          'relative cursor-default select-none px-3 py-2'
-                                        )
-                                      }
-                                      value={mood}
-                                    >
-                                      <div className="flex items-center">
-                                        <div
-                                          className={classNames(
-                                            mood.bgColor,
-                                            'flex h-8 w-8 items-center justify-center rounded-full'
-                                          )}
-                                        >
-                                          <mood.icon
-                                            className={classNames(mood.iconColor, 'h-5 w-5 flex-shrink-0')}
-                                            aria-hidden="true"
-                                          />
-                                        </div>
-                                        <span className="ml-3 block truncate font-medium">{mood.name}</span>
-                                      </div>
-                                    </Listbox.Option>
-                                  ))}
-                                </Listbox.Options>
-                              </Transition>
-                            </div>
-                          </>
-                        )}
-                      </Listbox>
-                    </div>
-                  </div>
-                  <button
-                    type="submit"
-                    className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                  >
-                    Comment
-                  </button>
-                </div>
-              </form>
-            </div> */}
           </div>
         </div>
       </div>
-
     </ContainerPadded>
   )
-
 }

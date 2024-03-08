@@ -105,9 +105,32 @@ const remove = async (id: string) => {
   await service_transactions_collection().doc(id).delete();
 };
 
+type OpStr =
+  | "=="
+  | "!="
+  | "<"
+  | "<="
+  | ">"
+  | ">="
+  | "array-contains"
+  | "in"
+  | "array-contains-any";
+
+const queryByField = async (
+  fieldName: keyof ServiceTransactionDbModel,
+  opStr: OpStr,
+  value: string
+) => {
+  const querySnapshot = await service_transactions_collection()
+    .where(fieldName, "==", value)
+    .get();
+  return querySnapshot.docs.map((doc) => doc.data());
+};
+
 export const serviceTransactionsDb = {
   create,
   read,
   update,
   remove,
+  queryByField,
 };
