@@ -7,6 +7,7 @@ import { AddSeatsTabs } from "~/components/pages/service-periods/add-seat-tabs";
 import { ServicePeriodTabs } from "~/components/pages/service-periods/headers";
 import { Label } from "~/components/shadcn/ui/label";
 import { protectedRoute } from "~/lib/auth/auth.server";
+import { personDb } from "~/lib/database/person/person-crud.server";
 import { servicePeriodExists } from "~/lib/database/service-periods/domain-logic/checks.server";
 import { ServicePeriodId } from "~/lib/database/service-periods/types/service-periods-model";
 
@@ -24,9 +25,16 @@ const schema = z.object({
 
 
 const mutation = makeDomainFunction(schema)(async (values) => {
-  console.log(values);
-  return { status: "success" }
+  const personId = await personDb.create({
+    first_name: values.fname,
+    last_name: values.lname,
+    phone: values.phone,
+    email: "",
+    type: "caregiver"
+  })
 
+  console.log(values);
+  return { status: "success", personId }
 })
 
 export const action = async ({ request }: ActionFunctionArgs) => {

@@ -63,7 +63,7 @@ const remove = async (id: string) => {
   await personCollRef.doc(id).delete();
 };
 
-export const PersonDb = {
+export const personDb = {
   create,
   read,
   update,
