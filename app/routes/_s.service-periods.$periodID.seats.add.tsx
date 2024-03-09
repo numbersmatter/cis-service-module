@@ -11,14 +11,14 @@ import { servicePeriodExists } from "~/lib/service-periods/domain-logic/checks.s
 import { ServicePeriodId } from "~/lib/service-periods/types/service-periods-model";
 
 const schema = z.object({
-  fname: z.string(),
-  lname: z.string(),
-  phone: z.string(),
-  street: z.string(),
-  unit: z.string(),
-  city: z.string(),
-  state: z.string(),
-  zip: z.string(),
+  fname: z.string().min(2).max(50),
+  lname: z.string().min(2).max(50),
+  phone: z.string().length(10),
+  street: z.string().min(2).max(50),
+  unit: z.string().max(50),
+  city: z.string().min(2).max(50),
+  state: z.string().length(2),
+  zip: z.string().length(5),
   dropOffNotes: z.string(),
 })
 
