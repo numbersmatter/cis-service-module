@@ -13,10 +13,11 @@ import {
 import { Menu, Transition } from '@headlessui/react'
 import { ContainerPadded } from "~/components/common/containers";
 import { protectedRoute } from "~/lib/auth/auth.server";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { isRouteErrorResponse, Outlet, useLoaderData, useRouteError } from "@remix-run/react";
 import { SectionHeaderWithAddAction } from "~/components/common/section-headers";
 import DataCards from "~/components/pages/home/data-cards";
 import { ServicePeriodHeader, ServicePeriodTabs } from "~/components/pages/service-periods/headers";
+import { RouteError, StandardError } from "~/components/common/ErrorPages";
 
 const tabs = [
   { name: 'Applied', href: '#', current: false },
@@ -57,4 +58,20 @@ export default function Route() {
       </ContainerPadded>
     </>
   )
+}
+
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+    const test = error
+    return <RouteError routeError={error} />
+  }
+  else if (error instanceof Error) {
+    return (
+      <StandardError error={error} />
+    );
+  } else {
+    return <h1>Unknown Error</h1>;
+  }
 }

@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { DropdownNavMenu } from "~/components/common/dropdown-nav-menu";
 import { SectionHeaderWithAddAction } from "~/components/common/section-headers";
 import { ServicePeriodTabs } from "~/components/pages/service-periods/headers";
@@ -21,20 +21,26 @@ export default function Route() {
     { label: 'New Seat', textValue: 'seat' },
   ]
 
-  const onMenuSelect = (e: Event) => {
-    console.log('menu select', e.currentTarget);
+  const onMenuSelect = (value: string) => {
+    console.log('menu select', value);
   }
 
   return (
     <main>
-      <ServicePeriodTabs baseUrl={baseUrl} defaultTab="seats" />
-      <div className="mt-6" />
-      <Outlet />
+      <SectionHeaderWithAddAction
+        title="Seats"
+        addButton={<DropdownNavMenu
+          menuItems={menuItems}
+          onSelect={onMenuSelect}
+          menuTitle="Add"
+          menuLabel="Select Type"
+        />}
+      />
     </main>
   )
 };
 
-export function ActionButton({ title, }: { title: string, }) {
+function ActionButton({ title, }: { title: string, }) {
   return (
     <button
       className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
