@@ -1,7 +1,7 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { protectedRoute } from "~/lib/auth/auth.server";
-import { servicePeriodsDb } from "~/lib/service-periods/service-periods-crud.server";
+import { servicePeriodsDb } from "~/lib/database/service-periods/service-periods-crud.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   let { user } = await protectedRoute(request);

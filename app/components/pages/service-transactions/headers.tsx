@@ -5,7 +5,7 @@ import { classNames } from '~/lib'
 import grocery from "~/images/gifs/grocery.gif"
 import { Link } from '@remix-run/react'
 
-import { ServiceTransaction } from '~/lib/service-transactions/types/service-trans-model'
+import { ServiceTransaction } from '~/lib/database/service-transactions/types/service-trans-model'
 
 
 export default function ServiceTransactionHeader(

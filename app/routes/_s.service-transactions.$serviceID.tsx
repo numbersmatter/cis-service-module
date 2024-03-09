@@ -10,8 +10,8 @@ import { AddItemDialog } from "~/components/common/form-dialog";
 import ServiceTransactionHeader from "~/components/pages/service-transactions/headers";
 import { classNames } from "~/lib";
 import { protectedRoute } from "~/lib/auth/auth.server";
-import { FoodBoxOrder } from "~/lib/food-box-order/types/food-box-order-model";
-import { serviceTransactionsDb } from "~/lib/service-transactions/service-transactions-crud.server";
+import { FoodBoxOrder } from "~/lib/database/food-box-order/types/food-box-order-model";
+import { serviceTransactionsDb } from "~/lib/database/service-transactions/service-transactions-crud.server";
 
 const foodBoxRequest: FoodBoxOrder = {
   id: "1",

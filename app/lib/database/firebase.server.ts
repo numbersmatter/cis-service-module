@@ -28,4 +28,5 @@ export const cis_t_Db: NonprofitDbPaths = {
   packedFoodBoxes: "/nonprofits/cist/inventory/food_pantry/packed_food_boxes",
   programAreas: "/nonprofits/cist/program_areas",
   programs: "/nonprofits/cist/programs",
+  persons: "/nonprofits/cist/persons",
 };

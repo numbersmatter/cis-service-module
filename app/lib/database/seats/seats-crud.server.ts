@@ -7,7 +7,7 @@ import {
   getFirestore,
 } from "firebase-admin/firestore";
 import { Seat, SeatDbModel } from "./types/seats-model";
-import { cis_t_Db } from "../database/firebase.server";
+import { cis_t_Db } from "../firebase.server";
 
 // function toFirestore
 

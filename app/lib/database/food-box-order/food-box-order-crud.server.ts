@@ -7,7 +7,7 @@ import {
   FoodBoxOrder,
   FoodBoxOrderDbModel,
 } from "./types/food-box-order-model";
-import { cis_t_Db } from "../database/firebase.server";
+import { cis_t_Db } from "../firebase.server";
 
 // converter to firestore
 

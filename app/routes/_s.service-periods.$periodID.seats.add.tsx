@@ -7,8 +7,8 @@ import { AddSeatsTabs } from "~/components/pages/service-periods/add-seat-tabs";
 import { ServicePeriodTabs } from "~/components/pages/service-periods/headers";
 import { Label } from "~/components/shadcn/ui/label";
 import { protectedRoute } from "~/lib/auth/auth.server";
-import { servicePeriodExists } from "~/lib/service-periods/domain-logic/checks.server";
-import { ServicePeriodId } from "~/lib/service-periods/types/service-periods-model";
+import { servicePeriodExists } from "~/lib/database/service-periods/domain-logic/checks.server";
+import { ServicePeriodId } from "~/lib/database/service-periods/types/service-periods-model";
 
 const schema = z.object({
   fname: z.string().min(2).max(50),

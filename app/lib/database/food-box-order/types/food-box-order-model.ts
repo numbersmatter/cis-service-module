@@ -1,4 +1,4 @@
-import { ServiceTransactionId } from "~/lib/service-transactions/types/service-trans-model";
+import { ServiceTransactionId } from "~/lib/database/service-transactions/types/service-trans-model";
 import {
   ItemLine,
   ValueEstimationProcess,

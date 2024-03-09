@@ -4,9 +4,9 @@ import { ContainerPadded } from "~/components/common/containers";
 import { HeaderTabs, SectionHeader, TabOption } from "~/components/common/header-tabs";
 import { DataTable } from "~/components/display/data-table";
 import { protectedRoute } from "~/lib/auth/auth.server";
-import { programsDb } from "~/lib/programs/programs-crud.server";
-import { servicePeriodsDb } from "~/lib/service-periods/service-periods-crud.server";
-import { servicePeriodsOfProgramColumns } from "~/lib/service-periods/tables";
+import { programsDb } from "~/lib/database/programs/programs-crud.server";
+import { servicePeriodsDb } from "~/lib/database/service-periods/service-periods-crud.server";
+import { servicePeriodsOfProgramColumns } from "~/lib/database/service-periods/tables";
 
 
 

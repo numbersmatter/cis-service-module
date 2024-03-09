@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase-admin/firestore";
-import { SeatId } from "~/lib/seats/types/seats-model";
+import { SeatId } from "~/lib/database/seats/types/seats-model";
 
 export type ServiceTransactionId = string;
 type ServiceTransactionStatus = "pending" | "received" | "cancelled";

@@ -1,5 +1,5 @@
 import { PaperClipIcon } from '@heroicons/react/20/solid'
-import { ProgramArea } from '~/lib/program-area/program-area-model'
+import { ProgramArea } from '~/lib/database/program-area/program-area-model'
 
 export default function ProgramAreaDetails(
   { programArea }: { programArea: ProgramArea }

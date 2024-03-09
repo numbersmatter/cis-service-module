@@ -3,7 +3,7 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 import { ContainerPadded } from "~/components/common/containers";
 import { HeaderTabs, SectionHeader, TabOption } from "~/components/common/header-tabs";
 import { protectedRoute } from "~/lib/auth/auth.server";
-import { programsDb } from "~/lib/programs/programs-crud.server";
+import { programsDb } from "~/lib/database/programs/programs-crud.server";
 
 
 

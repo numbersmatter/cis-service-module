@@ -4,9 +4,9 @@ import { SectionHeaderWithAddAction } from "~/components/common/section-headers"
 import { DataTable } from "~/components/display/data-table";
 import { ServicePeriodTabs } from "~/components/pages/service-periods/headers";
 import { protectedRoute } from "~/lib/auth/auth.server";
-import { serviceTransactionsDb } from "~/lib/service-transactions/service-transactions-crud.server";
-import { serviceTransactionColumns } from "~/lib/service-transactions/service-transactions-tables";
-import { ServiceTransaction } from "~/lib/service-transactions/types/service-trans-model";
+import { serviceTransactionsDb } from "~/lib/database/service-transactions/service-transactions-crud.server";
+import { serviceTransactionColumns } from "~/lib/database/service-transactions/service-transactions-tables";
+import { ServiceTransaction } from "~/lib/database/service-transactions/types/service-trans-model";
 
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
