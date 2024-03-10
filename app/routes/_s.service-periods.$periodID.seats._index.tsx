@@ -2,7 +2,8 @@ import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { DropdownNavMenu } from "~/components/common/dropdown-nav-menu";
 import { SectionHeaderWithAddAction } from "~/components/common/section-headers";
-import { DataTable, SelectableRowTable } from "~/components/display/data-table";
+import { DataTable, SelectableRowTable, SelectableTableComp } from "~/components/display/data-table";
+import { useSelectableTable } from "~/components/display/data-table-hook";
 import { ServicePeriodTabs } from "~/components/pages/service-periods/headers";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { familyDb } from "~/lib/database/families/family-crud.server";
@@ -50,6 +51,15 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 export default function Route() {
   const { baseUrl, seats } = useLoaderData<typeof loader>();
+  const seatsData = seats.map(seat => {
+    return {
+      id: seat.id,
+      family_name: seat.family_name,
+      enrolled_date: new Date(seat.enrolled_date),
+      number_of_members: seat.number_of_members,
+    }
+  })
+  // const { table } = useSelectableTable({ data: seatsData, columns: seatsOfServicePeriod })
 
   const menuItems = [
     { label: 'New Family and Seat', textValue: 'family' },
@@ -60,23 +70,22 @@ export default function Route() {
     console.log('menu select', value);
   }
 
-  const seatsData = seats.map(seat => {
-    return {
-      id: seat.id,
-      family_name: seat.family_name,
-      enrolled_date: new Date(seat.enrolled_date),
-      number_of_members: seat.number_of_members,
-    }
-  })
   return (
-    <main>
+    <main className="pb-9 ">
       <SectionHeaderWithAddAction
         title="Seats"
         addButton={<ActionButton title="Add Seat"
         />}
       />
-      <pre>{JSON.stringify(seats, null, 2)}</pre>
-      <SelectableRowTable columns={seatsOfServicePeriod} data={seatsData} />
+      <DataTable
+        columns={seatsOfServicePeriod}
+        data={seatsData}
+      />
+      <div className="py-3">
+
+        <pre>{JSON.stringify(seats, null, 2)}</pre>
+        {/* <SelectableTableComp columns={seatsOfServicePeriod} table={table} /> */}
+      </div>
     </main>
   )
 };

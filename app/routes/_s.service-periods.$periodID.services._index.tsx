@@ -35,11 +35,11 @@ export default function Route() {
 
   return (
     <main>
-      <ServicePeriodTabs baseUrl={baseUrl} defaultTab="services" />
-      <div className="mt-6" />
+
       <SectionHeaderWithAddAction title="Service Transactions" addButton={<ActionButton title="Add Service" />} />
       <div className="mt-6" />
       <DataTable columns={serviceTransactionColumns} data={servicesData} />
+      <pre>{JSON.stringify(service_transactions, null, 2)}</pre>
     </main>
   )
 };

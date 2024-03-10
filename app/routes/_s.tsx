@@ -44,7 +44,14 @@ export default function RouteComponent() {
           </div>
         </div>
       </div>
+      {/* <div className="pb-7"> */}
+
       <Outlet />
+      {/* </div> */}
+      <footer className="bg-slate-400 px-2 py-2 sm:px-2 md:py-2 lg:px-8">
+        {/* Your footer */}
+        <div className="h-9" />
+      </footer>
     </StaffShell>
   );
 }

@@ -66,7 +66,7 @@ export const seatsOfServicePeriod: ColumnDef<ServicePeriodSeatsCols>[] =
       header: "Link",
       cell: ({ row }) => {
         return (
-          <Link to={`/seats/${row.original.id}`}>Link</Link>
+          <Link to={`${row.original.id}`}>Link</Link>
         )
       }
     }
