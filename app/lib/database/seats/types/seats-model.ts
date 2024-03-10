@@ -25,3 +25,10 @@ export interface SeatDbModel {
   enrolled_date: Timestamp;
   unenrolled_date?: Timestamp;
 }
+
+export interface SeatAdd {
+  service_period_id: ServicePeriodId;
+  application_id: string;
+  is_active: boolean;
+  status: "pending" | "active" | "inactive";
+}

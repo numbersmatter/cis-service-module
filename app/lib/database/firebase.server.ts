@@ -19,7 +19,7 @@ interface NonprofitDbPaths {
 export const fireDb = (path: FirestorCollectionPath) =>
   getFirestore().collection(path);
 
-export const cis_t_Db: NonprofitDbPaths = {
+export const cis_t_Db = {
   servicePeriods: "/nonprofits/cist/service_periods",
   seats: "/nonprofits/cist/seats",
   applications: "/nonprofits/cist/applications",
@@ -29,4 +29,5 @@ export const cis_t_Db: NonprofitDbPaths = {
   programAreas: "/nonprofits/cist/program_areas",
   programs: "/nonprofits/cist/programs",
   persons: "/nonprofits/cist/persons",
+  families: "/nonprofits/cist/families",
 };

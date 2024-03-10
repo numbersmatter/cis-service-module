@@ -1,13 +1,15 @@
 import {
   DocumentData,
+  FieldValue,
   FirestoreDataConverter,
   QueryDocumentSnapshot,
   Timestamp,
   WithFieldValue,
   getFirestore,
 } from "firebase-admin/firestore";
-import { Seat, SeatDbModel } from "./types/seats-model";
+import { Seat, SeatAdd, SeatDbModel } from "./types/seats-model";
 import { cis_t_Db } from "../firebase.server";
+import { Feather } from "lucide-react";
 
 // function toFirestore
 
@@ -54,9 +56,16 @@ const seatConverter: FirestoreDataConverter<Seat> = {
 const seats_collection = () =>
   getFirestore().collection(cis_t_Db.seats).withConverter(seatConverter);
 
-const create = async (seat: Seat) => {
+const create = async (seat: SeatAdd) => {
   const colRef = seats_collection();
-  const docRef = await colRef.add({ ...seat });
+  const data = {
+    ...seat,
+    id: "",
+    created_date: new Date(),
+    updated_date: new Date(),
+    enrolled_date: new Date(),
+  };
+  const docRef = await colRef.add(data);
   return docRef.id;
 };
 
