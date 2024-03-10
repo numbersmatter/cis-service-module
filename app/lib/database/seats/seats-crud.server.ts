@@ -83,9 +83,18 @@ const remove = async (id: string) => {
   await seats_collection().doc(id).delete();
 };
 
+const queryByString = async (field: keyof Seat, value: string) => {
+  const querySnapshot = await seats_collection()
+    .where(field, "==", value)
+    .get();
+
+  return querySnapshot.docs.map((doc) => doc.data());
+};
+
 export const seatsDb = {
   create,
   read,
   update,
   remove,
+  queryByString,
 };

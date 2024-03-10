@@ -2,19 +2,54 @@ import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { DropdownNavMenu } from "~/components/common/dropdown-nav-menu";
 import { SectionHeaderWithAddAction } from "~/components/common/section-headers";
+import { DataTable, SelectableRowTable } from "~/components/display/data-table";
 import { ServicePeriodTabs } from "~/components/pages/service-periods/headers";
 import { protectedRoute } from "~/lib/auth/auth.server";
+import { familyDb } from "~/lib/database/families/family-crud.server";
+import { FamilyAppModel } from "~/lib/database/families/types";
+import { seatsDb } from "~/lib/database/seats/seats-crud.server";
+import { seatsOfServicePeriod } from "~/lib/database/seats/seats-tables";
 
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   let { user } = await protectedRoute(request);
   const baseUrl = `/service-periods/${params.periodID}`;
+  const service_period_id = params.periodID ?? "periodID";
 
-  return json({ baseUrl });
+  // get seats in period
+  const seats_in_period = await seatsDb.queryByString(
+    "service_period_id", service_period_id
+  );
+
+  // create an array of read promises for the families
+  const familyPromises = seats_in_period.map(seat => {
+    return familyDb.read(seat.application_id);
+  });
+
+  // resolve the promises
+  const familiesUnfiltered = await Promise.all(familyPromises);
+  const families = familiesUnfiltered.filter(family => family !== undefined) as FamilyAppModel[];
+
+  // add the family data to the seat object
+  const seatsWithFamilies = seats_in_period.map((seat, index) => {
+    const family = families.find(family => family.id === seat.application_id);
+    if (!family) return;
+    return {
+      ...seat,
+      family_name: family.family_name,
+      family_id: family.id,
+      number_of_members: family.members.length,
+
+    }
+  });
+
+
+
+  return json({ baseUrl, seats: seatsWithFamilies });
 };
 
 export default function Route() {
-  const { baseUrl } = useLoaderData<typeof loader>();
+  const { baseUrl, seats } = useLoaderData<typeof loader>();
 
   const menuItems = [
     { label: 'New Family and Seat', textValue: 'family' },
@@ -25,6 +60,14 @@ export default function Route() {
     console.log('menu select', value);
   }
 
+  const seatsData = seats.map(seat => {
+    return {
+      id: seat.id,
+      family_name: seat.family_name,
+      enrolled_date: new Date(seat.enrolled_date),
+      number_of_members: seat.number_of_members,
+    }
+  })
   return (
     <main>
       <SectionHeaderWithAddAction
@@ -32,6 +75,8 @@ export default function Route() {
         addButton={<ActionButton title="Add Seat"
         />}
       />
+      <pre>{JSON.stringify(seats, null, 2)}</pre>
+      <SelectableRowTable columns={seatsOfServicePeriod} data={seatsData} />
     </main>
   )
 };
