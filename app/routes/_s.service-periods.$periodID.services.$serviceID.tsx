@@ -18,7 +18,6 @@ import { serviceTransactionsDb } from "~/lib/database/service-transactions/servi
 
 const foodBoxRequest: FoodBoxOrder = {
   id: "1",
-  value: 0,
   photo_url: "",
   notes: "",
   value_estimation_process: "other",
@@ -26,12 +25,11 @@ const foodBoxRequest: FoodBoxOrder = {
   delivery_method: 'DoorDash',
   items: [
     {
-      item_id: "1",
-      item_name: "Packed Box",
-      value: 0,
+      item_id: "fdsfef",
+      item_name: "March 1, 2024 Menu Box",
+      value: 7000,
       quantity: 1,
-      type: "packed-box"
-
+      type: "menu-box"
     },
 
   ],
@@ -130,7 +128,7 @@ export default function ServiceTransactionServiceIDRoute() {
           </tr>
         ))}
       </ServiceInvoice>
-      <pre>{JSON.stringify(service, null, 2)}</pre>
+      <pre>{JSON.stringify(lineItems, null, 2)}</pre>
     </ContainerPadded>
   )
 }

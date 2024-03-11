@@ -15,7 +15,6 @@ export interface FoodBoxOrderDbModel {
   delivery_method: DeliveryMethods;
   items: ItemLine[];
   notes: string;
-  value: number;
   photo_url: string;
   value_estimation_type: ValueEstimationType;
   value_estimation_process: ValueEstimationProcess;
