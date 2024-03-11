@@ -1,21 +1,17 @@
-import { Listbox, Transition } from "@headlessui/react";
-import { CheckCircleIcon, FaceFrownIcon, FaceSmileIcon, FireIcon, HandThumbUpIcon, HeartIcon, PaperClipIcon, UserCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { UserCircleIcon, } from "@heroicons/react/24/outline";
 import { json, type ActionFunctionArgs, redirect } from "@remix-run/node";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { CalendarDaysIcon, CreditCardIcon } from "lucide-react";
-import { Fragment, useState } from "react";
 import { ContainerPadded } from "~/components/common/containers";
 import { AddItemDialog } from "~/components/common/form-dialog";
 import ServiceTransactionHeader from "~/components/pages/service-transactions/headers";
-import { classNames } from "~/lib";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { FoodBoxOrder } from "~/lib/database/food-box-order/types/food-box-order-model";
 import { serviceTransactionsDb } from "~/lib/database/service-transactions/service-transactions-crud.server";
 
 const foodBoxRequest: FoodBoxOrder = {
   id: "1",
-  value: 0,
   photo_url: "",
   notes: "",
   value_estimation_process: "other",

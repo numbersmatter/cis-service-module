@@ -14,7 +14,7 @@ import {
 } from "./types/service-periods-model";
 
 // Function to convert ServicePeriod to ServicePeriodDbModel
-function servicePeriodToDbModel(
+export function servicePeriodToDbModel(
   servicePeriod: ServicePeriod
 ): ServicePeriodDbModel {
   return {

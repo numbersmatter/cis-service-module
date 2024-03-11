@@ -30,4 +30,5 @@ export const cis_t_Db = {
   programs: "/nonprofits/cist/programs",
   persons: "/nonprofits/cist/persons",
   families: "/nonprofits/cist/families",
+  service_list: "/nonprofits/cist/service_lists",
 };
