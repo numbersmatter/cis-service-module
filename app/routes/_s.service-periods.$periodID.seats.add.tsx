@@ -42,14 +42,23 @@ const mutation = (service_period_Id: string) => makeDomainFunction(schema)(async
   });
 
   const seatId = await seatsDb.create({
+    delivery_notes: values.dropOffNotes,
     service_period_id: service_period_Id,
+    family_id: familyId,
     application_id: familyId,
     is_active: true,
-    status: "pending"
+    status: "pending",
+    address: {
+      street: values.street,
+      unit: values.unit,
+      city: values.city,
+      state: values.state,
+      zip: values.zip
+    }
   })
 
   console.log(values);
-  return { status: "success", personId, familyId }
+  return { status: "success", personId, familyId, seatId }
 })
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -64,7 +73,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
   const result = await performMutation({ request, schema, mutation: mutatFunc });
 
-  return json({ result })
+  return redirect(`/service-periods/${periodID}/seats`)
 };
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {

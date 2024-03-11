@@ -14,10 +14,19 @@ export interface Seat {
   updated_date: Date;
   enrolled_date: Date;
   unenrolled_date?: Date;
+  delivery_notes: string;
+  address: {
+    street: string;
+    unit: string;
+    city: string;
+    state: string;
+    zip: string;
+  };
 }
 
 export interface SeatDbModel {
   service_period_id: ServicePeriodId;
+  delivery_notes: string;
   family_id: string;
   application_id: string;
   is_active: boolean;
@@ -26,12 +35,27 @@ export interface SeatDbModel {
   updated_date: Timestamp;
   enrolled_date: Timestamp;
   unenrolled_date?: Timestamp;
+  address: {
+    street: string;
+    unit: string;
+    city: string;
+    state: string;
+    zip: string;
+  };
 }
 
 export interface SeatAdd {
   service_period_id: ServicePeriodId;
+  delivery_notes: string;
   application_id: string;
   is_active: boolean;
   status: "pending" | "active" | "inactive";
   family_id: string;
+  address: {
+    street: string;
+    unit: string;
+    city: string;
+    state: string;
+    zip: string;
+  };
 }
