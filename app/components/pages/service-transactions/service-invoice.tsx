@@ -4,10 +4,12 @@ import { ServiceTransaction, ServiceTransactionValue } from "~/lib/database/serv
 import { CalendarDaysIcon, CreditCardIcon, UserCircleIcon } from "@heroicons/react/20/solid";
 import { Seat } from "~/lib/database/seats/types/seats-model";
 import { dollarValueConverter } from "~/lib/value-estimation/utils";
+import { FoodBoxOrder } from "~/lib/database/food-box-order/types/food-box-order-model";
+import { ItemLine } from "~/lib/value-estimation/types/item-estimations";
 
 
 
-export default function ServiceInvoice({
+export function ServiceInvoice({
   service,
   familyName,
   seat,
@@ -120,7 +122,6 @@ export default function ServiceInvoice({
 
 function InvoiceSummery({ service, familyName }: { service: ServiceTransaction, familyName: string }) {
 
-
   const dollarValue = dollarValueConverter(service.value);
 
   return <div className="lg:col-start-3 lg:row-end-1">
@@ -174,4 +175,44 @@ function InvoiceSummery({ service, familyName }: { service: ServiceTransaction, 
       </div>
     </div>
   </div>;
+}
+
+
+export function FoodBoxRequestInvoiceTable({
+  foodBoxOrder }: {
+    foodBoxOrder: FoodBoxOrder
+  }) {
+  const invoiceItems = foodBoxOrder.items.map((item) => {
+    return {
+      ...item,
+      value: dollarValueConverter(item.value),
+    }
+  })
+  return (
+    <>
+      {
+        invoiceItems.map((item) => (
+          <tr key={item.item_id} className="border-b border-gray-100">
+            <td className="max-w-0 px-0 py-5 align-top">
+              <div className="truncate font-medium text-gray-900">
+                {item.item_name}
+              </div>
+              <div className="truncate text-gray-500">
+                {item.item_name}
+              </div>
+            </td>
+            <td className="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">
+              {item.type}
+            </td>
+            <td className="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">
+              {item.quantity}
+            </td>
+            <td className="py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700">{item.value}</td>
+          </tr>
+        ))
+      }
+    </>
+
+
+  )
 }

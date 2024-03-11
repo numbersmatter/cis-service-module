@@ -13,7 +13,7 @@ const navigation = [
   { name: 'Program Area', href: '/program-areas/', current: false },
   { name: 'Service Periods', href: '/service-periods/', current: false },
   { name: 'Families', href: '/families/', current: false },
-  { name: 'Service Support', href: '/service/', current: false },
+  { name: 'Service Lists', href: '/service-lists/', current: false },
 ]
 const userNavigation = [
   // { name: 'Your Profile', href: '/' },
