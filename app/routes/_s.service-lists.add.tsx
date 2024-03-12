@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { DataTable } from "~/components/display/data-table";
 import { protectedRoute } from "~/lib/auth/auth.server";
@@ -26,7 +26,7 @@ const mutation = () => makeDomainFunction(schema)
 
     const service_period = await servicePeriodsDb.read(values.service_period_id);
     if (!service_period) {
-      return { status: "error", message: "Service period not found" };
+      throw new Response("Service period not found");
     }
 
     const seatsArray = await seatsDb.queryByString("service_period_id", values.service_period_id);
@@ -41,16 +41,16 @@ const mutation = () => makeDomainFunction(schema)
       description: values.description,
       service_period_id: values.service_period_id,
       service_period: service_periodDbModel,
-      serviceType: "FoodBoxOrder",
       seatsArray: seatsIds,
       serviceItems: [],
     }
 
-    // const serviceListId = await serviceListsDb.create({
-    //  ...serviceListData,
-    // })
+    const serviceListId = await serviceListsDb.create({
+      ...serviceListData,
+      serviceType: "FoodBoxOrder",
+    })
 
-    return { status: "success", serviceListData }
+    return { status: "success", serviceListData, serviceListId }
   })
 
 
@@ -69,8 +69,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     schema,
     mutation: mutation(),
   });
+  if (!result.success) {
+    return result;
+  }
 
-  return json(result);
+  return redirect(`/service-lists/${result.data.serviceListId}`);
 };
 
 

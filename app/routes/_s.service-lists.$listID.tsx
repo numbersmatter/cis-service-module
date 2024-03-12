@@ -18,6 +18,7 @@ import { SectionHeaderWithAddAction } from "~/components/common/section-headers"
 import DataCards from "~/components/pages/home/data-cards";
 import { ServicePeriodHeader, ServicePeriodTabs } from "~/components/pages/service-periods/headers";
 import { RouteError, StandardError } from "~/components/common/ErrorPages";
+import { serviceListsDb } from "~/lib/database/service-lists/service-lists-crud.server";
 
 const tabs = [
   { name: 'Applied', href: '#', current: false },
@@ -31,8 +32,14 @@ const tabs = [
 
 
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   let { user } = await protectedRoute(request);
+  const listID = params.listID ?? "listID"
+  const serviceList = await serviceListsDb.read(listID);
+
+  if (!serviceList) {
+    throw new Response("Service List not found", { status: 404 });
+  }
 
   const headerData = {
     programName: "Service List",
@@ -40,7 +47,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     programAreaName: "CIS - Food Pantry"
   }
 
-  return json({ user, headerData });
+  return json({ user, headerData, serviceList });
 };
 
 export default function Route() {
@@ -48,7 +55,7 @@ export default function Route() {
   return (
     <>
 
-      <Outlet />
+      <pre>{JSON.stringify(data.serviceList, null, 2)} </pre>
 
     </>
   )
