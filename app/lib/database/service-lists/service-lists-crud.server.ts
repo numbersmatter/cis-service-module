@@ -15,6 +15,7 @@ import {
   ServiceListId,
 } from "./types";
 import { cis_t_Db } from "../firebase.server";
+import { ItemLine } from "~/lib/value-estimation/types/item-estimations";
 
 // function toFirestore
 const serviceListToDbModel = (serviceList: ServiceList): ServiceListDbModel => {
@@ -87,10 +88,31 @@ const getAll = async () => {
   return snapshot.docs.map((doc) => doc.data());
 };
 
+const addItem = async (id: ServiceListId, item: ItemLine) => {
+  const itemId = serviceLists_collection().doc().id;
+  const addItem: ItemLine = {
+    ...item,
+    item_id: itemId,
+  };
+  const docRef = serviceLists_collection().doc(id);
+  await docRef.update({
+    serviceItems: FieldValue.arrayUnion(addItem),
+  });
+};
+
+const removeItem = async (id: ServiceListId, item: ItemLine) => {
+  const docRef = serviceLists_collection().doc(id);
+  await docRef.update({
+    serviceItems: FieldValue.arrayRemove(item),
+  });
+};
+
 export const serviceListsDb = {
   create,
   read,
   update,
   remove,
   getAll,
+  addItem,
+  removeItem,
 };

@@ -1,6 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Link } from "@remix-run/react";
 import { ItemLine } from "~/lib/value-estimation/types/item-estimations";
+import { Button } from "~/components/shadcn/ui/button";
+import { SingleButtonForm } from "~/components/common/single-button-form";
 
 interface ServiceListIndexCols {
   id: string;
@@ -26,12 +28,26 @@ export const serviceListItemsCols: ColumnDef<ItemLine>[] = [
     header: "Type",
   },
   {
+    accessorKey: "quantity",
+    header: "Quantity",
+  },
+  {
+    accessorKey: "value",
+    header: "Value",
+  },
+  {
     id: "item_id",
     accessorKey: "item_id",
-    header: "Link",
+    header: "Remove Item",
     cell: ({ row }) => {
       return (
-        <Link to={`${row.original.item_id}`}>{row.original.item_id}</Link>
+        <SingleButtonForm text="Remove Item">
+          <input type="hidden" readOnly name="item_id" value={row.original.item_id} />
+          <input type="hidden" readOnly name="item_name" value={row.original.item_name} />
+          <input type="hidden" readOnly name="quantity" value={row.original.quantity} />
+          <input type="hidden" readOnly name="value" value={row.original.value} />
+          <input type="hidden" readOnly name="actionType" value="removeItem" />
+        </SingleButtonForm>
       )
     }
   }

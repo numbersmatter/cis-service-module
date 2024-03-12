@@ -3,7 +3,7 @@ import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { Fragment, useState } from 'react'
 import { ContainerPadded } from "~/components/common/containers";
 import { protectedRoute } from "~/lib/auth/auth.server";
-import { Form, isRouteErrorResponse, Outlet, useLoaderData, useRouteError } from "@remix-run/react";
+import { Form, isRouteErrorResponse, Outlet, useActionData, useLoaderData, useRouteError } from "@remix-run/react";
 import DataCards from "~/components/pages/home/data-cards";
 import {
   Card,
@@ -30,6 +30,7 @@ import { FormDialog } from "~/components/common/form-dialog";
 import { performMutation } from "remix-forms";
 import { z } from "zod";
 import { makeDomainFunction } from "domain-functions";
+import { ItemLine } from "~/lib/value-estimation/types/item-estimations";
 
 const schema = z.object({
   item_name: z.string(),
@@ -37,9 +38,40 @@ const schema = z.object({
   value: z.number(),
 })
 
-const mutation = makeDomainFunction(schema)(
+const removeSchema = z.object({
+  item_id: z.string(),
+  item_name: z.string(),
+  quantity: z.number(),
+  value: z.number(),
+  actionType: z.literal("removeItem")
+})
+
+const removeMutation = (service_list_id: string) => makeDomainFunction(removeSchema)(
+  (async (values) => {
+    const removeItem: ItemLine = {
+      item_name: values.item_name,
+      quantity: values.quantity,
+      value: values.value,
+      type: "individual-items",
+      item_id: values.item_id
+    }
+    await serviceListsDb.removeItem(service_list_id, removeItem)
+    return { status: "success", values }
+  })
+)
+
+const mutation = (service_list_id: string) => makeDomainFunction(schema)(
   (async (values) => {
 
+    const newItemLine: ItemLine = {
+      item_name: values.item_name,
+      quantity: values.quantity,
+      value: values.value,
+      type: "individual-items",
+      item_id: "new-item-id"
+    }
+
+    await serviceListsDb.addItem(service_list_id, newItemLine)
 
 
     return { status: "success", values }
@@ -99,28 +131,60 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 };
 
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   let { user } = await protectedRoute(request);
+  const listID = params.listID ?? "listID"
+  const cloneRequest = request.clone();
+  const formData = await cloneRequest.formData();
+  const actionType = formData.get("actionType");
 
-  const result = await performMutation({
-    request,
-    schema,
-    mutation
-  })
+  const serviceList = await serviceListsDb.read(listID);
+  if (!serviceList) {
+    throw new Response("Service List not found", { status: 404 });
+  }
 
-  return json({ result });
+  if (!actionType) {
+    throw new Response("Action Type not found", { status: 400 });
+  }
+
+  if (actionType === "addItem") {
+
+    const result = await performMutation({
+      request,
+      schema,
+      mutation: mutation(listID)
+    })
+
+    return json({ result });
+  }
+
+  if (actionType === "removeItem") {
+    const result = await performMutation({
+      request,
+      schema: removeSchema,
+      mutation: removeMutation(listID)
+    })
+
+    return json({ result });
+  }
+
+  return json({ message: "No action performed" })
 };
 
 
 export default function Route() {
   const data = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
   const [steps, setSteps] = useState(data.steps)
+
+  const handleTabChange = (value: string) => {
+    console.log("value", value)
+  }
 
 
   return (
     <>
-
-      <ServiceListProgress defaultValue="items" steps={steps}>
+      <ServiceListProgress onValueChange={handleTabChange} defaultValue="items" steps={steps}>
         <ProgressTabsContent value="items" >
           <Card>
             <CardHeader>
@@ -129,12 +193,13 @@ export default function Route() {
                 Add the menu items for this service list.
               </CardDescription>
             </CardHeader>
-            <DataTable columns={serviceListItemsCols} data={data.serviceList.serviceItems} />
-
-            <CardFooter>
+            <DataTable
+              columns={serviceListItemsCols}
+              data={data.serviceList.serviceItems}
+            />
+            <CardFooter className="py-2">
               <FormDialog>
                 <Form method="post">
-
                   <Card>
                     <CardHeader>
                       <CardTitle>Other Item</CardTitle>
@@ -149,28 +214,37 @@ export default function Route() {
                       </div>
                       <div className="space-y-1">
                         <Label htmlFor="quantity">Quantity</Label>
-                        <Input name="quantity" type="number" />
+                        <Input id="quantity" name="quantity" type="number" />
                       </div>
                       <div className="space-y-1">
                         <Label htmlFor="value">Unit Value</Label>
-                        <Input name="value" type="number" />
+                        <Input id="value" name="value" type="number" />
                       </div>
                     </CardContent>
                     <CardFooter>
-                      <Button type="submit">Add Item</Button>
+                      <Button name="actionType" value="addItem" type="submit">Add Item</Button>
                     </CardFooter>
                   </Card>
                 </Form>
               </FormDialog>
             </CardFooter>
           </Card>
-
-
         </ProgressTabsContent>
-
+        <ProgressTabsContent value="seat">
+          <Card>
+            <CardHeader>
+              <CardTitle>Seat Selection</CardTitle>
+              <CardDescription>
+                Select the seats for this service list.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>Seat Selection</p>
+            </CardContent>
+          </Card>
+        </ProgressTabsContent>
       </ServiceListProgress>
       <pre>{JSON.stringify(data.serviceList, null, 2)} </pre>
-
     </>
   )
 }
