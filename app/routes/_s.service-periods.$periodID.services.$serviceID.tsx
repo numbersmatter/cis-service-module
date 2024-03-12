@@ -2,6 +2,7 @@ import { json, type ActionFunctionArgs, redirect } from "@remix-run/node";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { ContainerPadded } from "~/components/common/containers";
+import { DataTable } from "~/components/display/data-table";
 import { FoodBoxRequestInvoiceTable, ServiceInvoice } from "~/components/pages/service-transactions/service-invoice";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { familyDb } from "~/lib/database/families/family-crud.server";

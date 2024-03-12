@@ -18,7 +18,7 @@ import { Button } from "../ui/button"
 
 export function AddItemTabs() {
   return (
-    <Tabs defaultValue="box" className="">
+    <Tabs defaultValue="other" className="">
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="box">Packed Box</TabsTrigger>
         <TabsTrigger value="prepacked">Pre-Packed</TabsTrigger>
@@ -82,6 +82,10 @@ export function AddItemTabs() {
             <div className="space-y-1">
               <Label htmlFor="quantity">Quantity</Label>
               <Input id="quantity" type="number" />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="value">Unit Value</Label>
+              <Input id="value" type="number" />
             </div>
           </CardContent>
           <CardFooter>
