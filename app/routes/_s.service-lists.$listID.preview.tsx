@@ -23,6 +23,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     throw new Response("Service List not found", { status: 404 });
   }
 
+  if (serviceList.status === "applied") {
+    return redirect(`/service-lists/${listID}`)
+  }
+
   const serviceType = serviceList.serviceType;
   const numberOfRecords = serviceList.seatsArray.length;
   const baseUrl = `/service-lists/${listID}`

@@ -33,12 +33,12 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 export default function ProgramIDRoute() {
   const { program } = useLoaderData<typeof loader>();
   return (
-    <ContainerPadded>
+    <>
       <SectionHeader title={program.name} text2={program.id} text3="text3" />
 
       <Outlet />
 
-    </ContainerPadded>
+    </>
   )
 
 

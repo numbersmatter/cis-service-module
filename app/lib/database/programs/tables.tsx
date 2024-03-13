@@ -16,6 +16,10 @@ export const programsOfAreaColumns: ColumnDef<Program>[] = [
     header: "Name",
   },
   {
+    accessorKey: "program_area",
+    header: "Program Area",
+  },
+  {
     id: "id",
     accessorKey: "id",
     header: "Link",

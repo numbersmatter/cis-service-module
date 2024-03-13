@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { Fragment, useState } from 'react'
 import { ContainerPadded } from "~/components/common/containers";
 import { protectedRoute } from "~/lib/auth/auth.server";
@@ -115,6 +115,9 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   if (!serviceList) {
     throw new Response("Service List not found", { status: 404 });
+  }
+  if (serviceList.status === "applied") {
+    return redirect(`/service-lists/${listID}`)
   }
 
   const headerData = {

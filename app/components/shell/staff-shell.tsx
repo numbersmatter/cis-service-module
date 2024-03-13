@@ -10,7 +10,8 @@ import { LogoImg } from './company-logo-img';
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
-  { name: 'Program Area', href: '/program-areas/', current: false },
+  { name: 'Program Areas', href: '/program-areas/', current: false },
+  { name: 'Programs', href: '/programs/', current: false },
   { name: 'Service Periods', href: '/service-periods/', current: false },
   { name: 'Families', href: '/families/', current: false },
   { name: 'Service Lists', href: '/service-lists/', current: false },

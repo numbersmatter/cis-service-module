@@ -18,6 +18,7 @@ import { SectionHeaderWithAddAction } from "~/components/common/section-headers"
 import DataCards from "~/components/pages/home/data-cards";
 import { ServicePeriodHeader, ServicePeriodTabs } from "~/components/pages/service-periods/headers";
 import { RouteError, StandardError } from "~/components/common/ErrorPages";
+import { servicePeriodsDb } from "~/lib/database/service-periods/service-periods-crud.server";
 
 const tabs = [
   { name: 'Applied', href: '#', current: false },
@@ -31,12 +32,18 @@ const tabs = [
 
 
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   let { user } = await protectedRoute(request);
+  const servicePeriodID = params.periodID ?? "periodID";
+
+  const servicePeriod = await servicePeriodsDb.read(servicePeriodID);
+  if (!servicePeriod) {
+    throw new Response("Service Period not found", { status: 404 });
+  }
 
   const headerData = {
     programName: "Food Box Delivery",
-    servicePeriodName: "Spring 2024",
+    servicePeriodName: servicePeriod.name,
     programAreaName: "CIS - Food Pantry"
   }
 
