@@ -31,6 +31,8 @@ import { performMutation } from "remix-forms";
 import { z } from "zod";
 import { makeDomainFunction } from "domain-functions";
 import { ItemLine } from "~/lib/value-estimation/types/item-estimations";
+import { seatsOfServiceList } from "~/lib/database/seats/seats-tables";
+import { seatsDb } from "~/lib/database/seats/seats-crud.server";
 
 const schema = z.object({
   item_name: z.string(),
@@ -121,13 +123,29 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     programAreaName: "CIS - Food Pantry"
   }
 
+  const seatPromises = serviceList.seatsArray.map((seat) => {
+    const seatData = seatsDb.read(seat)
+    return seatData
+  });
+
+  const seatReads = await Promise.all(seatPromises);
+
+  const seats = seatReads
+    .filter((seat) => seat !== undefined).map((seat) => seat!);
+
+
+
+
+
+
+
   const steps: Step[] = [
     { id: 'items', name: 'Menu Items', to: '#', status: 'complete' },
     { id: 'seat', name: 'Seat Selection', to: '#', status: 'current' },
     { id: 'preview', name: 'Preview', to: '#', status: 'upcoming' },
   ]
 
-  return json({ user, headerData, serviceList, steps });
+  return json({ user, headerData, serviceList, steps, seats });
 };
 
 
@@ -180,6 +198,17 @@ export default function Route() {
   const handleTabChange = (value: string) => {
     console.log("value", value)
   }
+
+  const seatsData = data.seats.map((seat) => {
+    const { unenrolled_date, ...rest } = seat
+    return {
+      ...rest,
+      family_name: seat.family_name,
+      enrolled_date: new Date(seat.enrolled_date),
+      created_date: new Date(seat.created_date),
+      updated_date: new Date(seat.updated_date),
+    }
+  })
 
 
   return (
@@ -240,6 +269,10 @@ export default function Route() {
             </CardHeader>
             <CardContent>
               <p>Seat Selection</p>
+              <DataTable
+                columns={seatsOfServiceList}
+                data={seatsData}
+              />
             </CardContent>
           </Card>
         </ProgressTabsContent>

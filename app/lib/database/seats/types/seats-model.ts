@@ -6,6 +6,7 @@ export type SeatId = string;
 export interface Seat {
   id: SeatId;
   family_id: string;
+  family_name: string;
   service_period_id: ServicePeriodId;
   application_id: string;
   is_active: boolean;
@@ -28,6 +29,7 @@ export interface SeatDbModel {
   service_period_id: ServicePeriodId;
   delivery_notes: string;
   family_id: string;
+  family_name: string;
   application_id: string;
   is_active: boolean;
   status: "pending" | "active" | "inactive";
@@ -51,6 +53,7 @@ export interface SeatAdd {
   is_active: boolean;
   status: "pending" | "active" | "inactive";
   family_id: string;
+  family_name: string;
   address: {
     street: string;
     unit: string;

@@ -3,6 +3,7 @@ import { Link } from "@remix-run/react";
 import { ItemLine } from "~/lib/value-estimation/types/item-estimations";
 import { Button } from "~/components/shadcn/ui/button";
 import { SingleButtonForm } from "~/components/common/single-button-form";
+import { dollarValueConverter } from "~/lib/value-estimation/utils";
 
 interface ServiceListIndexCols {
   id: string;
@@ -34,6 +35,12 @@ export const serviceListItemsCols: ColumnDef<ItemLine>[] = [
   {
     accessorKey: "value",
     header: "Value",
+    cell: ({ row }) => {
+      const dollarValue = dollarValueConverter(row.original.value)
+      return (
+        <span>{dollarValue}</span>
+      )
+    }
   },
   {
     id: "item_id",
