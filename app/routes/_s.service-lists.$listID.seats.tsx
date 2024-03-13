@@ -133,16 +133,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const seats = seatReads
     .filter((seat) => seat !== undefined).map((seat) => seat!);
 
-
-
-
-
-
   const baseUrl = `/service-lists/${listID}`
 
   const steps: Step[] = [
-    { id: 'items', name: 'Menu Items', to: `${baseUrl}/items`, status: 'current' },
-    { id: 'seat', name: 'Seat Selection', to: `${baseUrl}/seats`, status: 'upcoming' },
+    { id: 'items', name: 'Menu Items', to: `${baseUrl}/items`, status: 'complete' },
+    { id: 'seat', name: 'Seat Selection', to: `${baseUrl}/seats`, status: 'current' },
     { id: 'preview', name: 'Preview', to: `${baseUrl}/preview`, status: 'upcoming' },
   ];
 
@@ -192,59 +187,44 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
 
 export default function Route() {
-  const data = useLoaderData<typeof loader>();
+  const { steps, serviceList, seats } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+
+  const handleTabChange = (value: string) => {
+    console.log("value", value)
+  }
+
+  const seatsData = seats.map((seat) => {
+    const { unenrolled_date, ...rest } = seat
+    return {
+      ...rest,
+      family_name: seat.family_name,
+      enrolled_date: new Date(seat.enrolled_date),
+      created_date: new Date(seat.created_date),
+      updated_date: new Date(seat.updated_date),
+    }
+  })
 
 
   return (
     <>
-      <ProgressPanels steps={data.steps} />
+      <ProgressPanels steps={steps} />
       <Card>
         <CardHeader>
-          <CardTitle>Menu Items</CardTitle>
+          <CardTitle>Seat Selection</CardTitle>
           <CardDescription>
-            Add the menu items for this service list.
+            Select the seats for this service list.
           </CardDescription>
         </CardHeader>
-        <DataTable
-          columns={serviceListItemsCols}
-          data={data.serviceList.serviceItems}
-        />
-        <CardFooter className="py-2">
-          <FormDialog>
-            <Form method="post">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Other Item</CardTitle>
-                  <CardDescription>
-                    Add other item
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="space-y-1">
-                    <Label htmlFor="item_name">Name</Label>
-                    <Input name="item_name" id="item_name" />
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="quantity">Quantity</Label>
-                    <Input id="quantity" name="quantity" type="number" />
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="value">Unit Value</Label>
-                    <Input id="value" name="value" type="number" />
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button name="actionType" value="addItem" type="submit">Add Item</Button>
-                </CardFooter>
-              </Card>
-            </Form>
-          </FormDialog>
-        </CardFooter>
+        <CardContent>
+          <p>Seat Selection</p>
+          <DataTable
+            columns={seatsOfServiceList}
+            data={seatsData}
+          />
+        </CardContent>
       </Card>
-
-
-      <pre>{JSON.stringify(data.serviceList, null, 2)} </pre>
+      <pre>{JSON.stringify(serviceList, null, 2)} </pre>
     </>
   )
 }

@@ -9,6 +9,7 @@ import {
 } from "firebase-admin/firestore";
 
 import {
+  ListStatus,
   ServiceList,
   ServiceListAdd,
   ServiceListDbModel,
@@ -55,6 +56,7 @@ const create = async (serviceList: ServiceListAdd) => {
     id: "",
     created_date: new Date(),
     applied_date: new Date(),
+    status: "preparing" as ListStatus,
   };
   const colRef = serviceLists_collection();
   const docRef = await colRef.add(data);

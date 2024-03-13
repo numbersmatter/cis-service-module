@@ -1,9 +1,11 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { makeDomainFunction } from "domain-functions";
 import { performMutation } from "remix-forms";
 import { z } from "zod";
+import ProgressPanels, { Step } from "~/components/common/progress-panels";
+import { SingleButtonForm } from "~/components/common/single-button-form";
 import { Button } from "~/components/shadcn/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/shadcn/ui/card"
 import { protectedRoute } from "~/lib/auth/auth.server";
@@ -18,13 +20,20 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const listID = params.listID ?? "listID";
   const serviceList = await serviceListsDb.read(listID);
   if (!serviceList) {
-    return json({ error: "Service List not found" }, { status: 404 });
+    throw new Response("Service List not found", { status: 404 });
   }
 
   const serviceType = serviceList.serviceType;
   const numberOfRecords = serviceList.seatsArray.length;
+  const baseUrl = `/service-lists/${listID}`
 
-  return json({ serviceType: "Food Box Request", numberOfRecords });
+  const steps: Step[] = [
+    { id: 'items', name: 'Menu Items', to: `${baseUrl}/items`, status: 'complete' },
+    { id: 'seat', name: 'Seat Selection', to: `${baseUrl}/seats`, status: 'complete' },
+    { id: 'preview', name: 'Preview', to: `${baseUrl}/preview`, status: 'current' },
+  ];
+
+  return json({ serviceType: "Food Box Request", numberOfRecords, steps, listID });
 };
 
 const schema = z.object({
@@ -61,6 +70,10 @@ const mutation = makeDomainFunction(schema)(
 
     const transactions = await Promise.all(transaction_promises);
 
+    await serviceListsDb.update(
+      values.serviceListID,
+      { status: "applied" }
+    )
 
     console.log(values);
     return transactions;
@@ -91,11 +104,17 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
 export default function Route() {
   const data = useLoaderData<typeof loader>();
+
+
   return (
-    <PreviewCard
-      serviceType="Food Box Request"
-      numberOfRecords={2}
-    />
+    <>
+      <ProgressPanels steps={data.steps} />
+      <PreviewCard
+        serviceType="Food Box Request"
+        numberOfRecords={2}
+        serviceListID={data.listID}
+      />
+    </>
   )
 }
 
@@ -103,9 +122,11 @@ export default function Route() {
 function PreviewCard({
   serviceType,
   numberOfRecords,
+  serviceListID
 }: {
   serviceType: string,
-  numberOfRecords: number
+  numberOfRecords: number,
+  serviceListID: string
 }) {
   return (
 
@@ -122,7 +143,10 @@ function PreviewCard({
       </CardContent>
       <CardFooter className="flex flex-row justify-between" >
         <Button variant="link">Back</Button>
-        <Button variant="default">Apply</Button>
+        <SingleButtonForm text="Apply Services">
+          <input type="hidden" name="actionType" value="applyServiceList" />
+          <input type="hidden" name="serviceListID" value={serviceListID} />
+        </SingleButtonForm>
       </CardFooter>
     </Card>
   )

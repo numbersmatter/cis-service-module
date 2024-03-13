@@ -9,6 +9,8 @@ import { ServiceTransactionType } from "../service-transactions/types/service-tr
 import { FieldValue, Timestamp } from "firebase-admin/firestore";
 
 export type ServiceListId = string;
+
+export type ListStatus = "preparing" | "applied" | "cancelled";
 interface ServiceListBase {
   name: string;
   description: string;
@@ -17,6 +19,7 @@ interface ServiceListBase {
   seatsArray: SeatId[];
   serviceType: ServiceTransactionType;
   serviceItems: ItemLine[];
+  status: ListStatus;
 }
 
 export interface ServiceList extends ServiceListBase {
