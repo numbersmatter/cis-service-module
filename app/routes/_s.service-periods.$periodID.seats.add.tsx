@@ -43,6 +43,7 @@ const mutation = (service_period_Id: string) => makeDomainFunction(schema)(async
 
   const seatId = await seatsDb.create({
     delivery_notes: values.dropOffNotes,
+    family_name: `${values.fname} ${values.lname} family`,
     service_period_id: service_period_Id,
     family_id: familyId,
     application_id: familyId,

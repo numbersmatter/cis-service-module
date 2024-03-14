@@ -87,9 +87,7 @@ export default function Route() {
 
   return (
     <div>
-      <Form method="post">
-        <AddServiceListForm />
-      </Form>
+      <AddServiceListForm />
       <pre>
         {JSON.stringify(actionData, null, 2)}
       </pre>

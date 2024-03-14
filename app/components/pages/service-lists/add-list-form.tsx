@@ -36,7 +36,9 @@ function ServicePeriodSelect() {
         <SelectValue placeholder="Spring 2024 Food Box Delivery" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="b2HJ2z4NC6xVpSAlTjxN">Spring 2024 Food Box Delivery </SelectItem>
+        <SelectItem value="b2HJ2z4NC6xVpSAlTjxN">
+          Spring 2024 Food Box Delivery
+        </SelectItem>
       </SelectContent>
     </Select>
   </div>;

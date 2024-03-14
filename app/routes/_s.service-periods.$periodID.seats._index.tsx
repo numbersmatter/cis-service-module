@@ -22,6 +22,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     "service_period_id", service_period_id
   );
 
+  const seatsOrdered = seats_in_period.sort((a, b) => {
+    return b.enrolled_date.getTime() - a.enrolled_date.getTime();
+  })
+
   // create an array of read promises for the families
   const familyPromises = seats_in_period.map(seat => {
     return familyDb.read(seat.application_id);
@@ -32,7 +36,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const families = familiesUnfiltered.filter(family => family !== undefined) as FamilyAppModel[];
 
   // add the family data to the seat object
-  const seatsWithFamilies = seats_in_period.map((seat, index) => {
+  const seatsWithFamilies = seatsOrdered.map((seat, index) => {
     const family = families.find(family => family.id === seat.application_id);
     if (!family) return;
     return {
