@@ -14,24 +14,21 @@ import AddServiceListForm from "~/components/pages/service-lists/add-list-form";
 import { performMutation } from "remix-forms";
 
 const schema = z.object({
-  name: z.string(),
+  name: z.string().min(3),
   description: z.string(),
-  service_period_id: z.string(),
+  service_period_id: z.string().length(20),
 });
 
 
 
-const mutation = () => makeDomainFunction(schema)
-  (async (values) => {
+const mutation = makeDomainFunction(schema)(
+  async (values) => {
 
+    // Ensure the service period exists
     const service_period = await servicePeriodsDb.read(values.service_period_id);
     if (!service_period) {
       throw new Response("Service period not found");
     }
-
-    const seatsArray = await seatsDb.queryByString("service_period_id", values.service_period_id);
-
-    const seatsIds = seatsArray.map(seat => seat.id);
 
 
     const service_periodDbModel = servicePeriodToDbModel(service_period);
@@ -41,8 +38,8 @@ const mutation = () => makeDomainFunction(schema)
       description: values.description,
       service_period_id: values.service_period_id,
       service_period: service_periodDbModel,
-      seatsArray: seatsIds,
-      serviceItems: [],
+      seats_array: [],
+      service_items: [],
     }
 
     const serviceListId = await serviceListsDb.create({
@@ -50,16 +47,18 @@ const mutation = () => makeDomainFunction(schema)
       service_type: "FoodBoxOrder",
     })
 
-    return { status: "success", serviceListData, serviceListId }
-  })
-
+    return { status: "success", serviceListData, }
+  }
+)
 
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   let { user } = await protectedRoute(request);
 
+  const servicePeriods = await servicePeriodsDb.getAll();
+
   const serviceLists = await serviceListsDb.getAll();
-  return json({ serviceLists });
+  return json({ serviceLists, servicePeriods });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -67,27 +66,33 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await performMutation({
     request,
     schema,
-    mutation: mutation(),
+    mutation,
   });
   if (!result.success) {
     return result;
   }
 
-  return redirect(`/service-lists/${result.data.serviceListId}`);
+  return redirect(`/service-lists/`);
 };
 
 
 
 
 export default function Route() {
-  let { serviceLists } = useLoaderData<typeof loader>();
+  let { servicePeriods } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+
+  const servicePeriodOptions = servicePeriods.map(servicePeriod => {
+    return { value: servicePeriod.id, label: servicePeriod.name }
+  })
 
 
 
   return (
     <div>
-      <AddServiceListForm />
+      <AddServiceListForm
+        servicePeriodOptions={servicePeriodOptions}
+      />
       <pre>
         {JSON.stringify(actionData, null, 2)}
       </pre>

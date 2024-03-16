@@ -5,8 +5,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~
 
 
 export default function AddServiceListForm({
+  servicePeriodOptions,
   children
-}: { children?: React.ReactNode }) {
+}: {
+  children?: React.ReactNode
+  servicePeriodOptions: { value: string, label: string }[]
+}) {
 
 
   return (
@@ -14,12 +18,7 @@ export default function AddServiceListForm({
       {children}
       <FormInputText label="Name" id="name" />
       <FormInputText label="Description" id="description" defaultValue="" />
-      <ServicePeriodSelect />
-
-      <input type="hidden" readOnly
-        name="service_period_id" value="b2HJ2z4NC6xVpSAlTjxN"
-      />
-
+      <ServicePeriodSelect servicePeriodOptions={servicePeriodOptions} />
       <div className="grid grid-cols-4 items-center gap-4">
         <button type="submit">Save changes</button>
       </div>
@@ -28,17 +27,23 @@ export default function AddServiceListForm({
   )
 }
 
-function ServicePeriodSelect() {
+function ServicePeriodSelect({
+  servicePeriodOptions
+}: {
+  servicePeriodOptions: { value: string, label: string }[]
+}) {
   return <div className="grid grid-cols-1 gap-2 pb-1 md:grid-cols-4 md:items-center md:gap-4">
     <Label className="text-left md:text-right">Service Period</Label>
-    <Select value="b2HJ2z4NC6xVpSAlTjxN"  >
+    <Select name={"service_period_id"} >
       <SelectTrigger className="col-span-3">
-        <SelectValue placeholder="Spring 2024 Food Box Delivery" />
+        <SelectValue placeholder="Choice Service Period" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="b2HJ2z4NC6xVpSAlTjxN">
-          Spring 2024 Food Box Delivery
-        </SelectItem>
+        {
+          servicePeriodOptions.map(({ value, label }) => {
+            return <SelectItem key={value} value={value}>{label}</SelectItem>
+          })
+        }
       </SelectContent>
     </Select>
   </div>;

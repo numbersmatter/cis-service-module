@@ -16,9 +16,9 @@ interface ServiceListBase {
   description: string;
   service_period_id: ServicePeriodId;
   service_period: ServicePeriodDbModel;
-  seatsArray: SeatId[];
-  serviceType: ServiceTransactionType;
-  serviceItems: ItemLine[];
+  seats_array: SeatId[];
+  service_type: ServiceTransactionType;
+  service_items: ItemLine[];
   status: ListStatus;
 }
 
