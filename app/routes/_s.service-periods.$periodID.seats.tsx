@@ -1,7 +1,6 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { DropdownNavMenu } from "~/components/common/dropdown-nav-menu";
-import { SectionHeaderWithAddAction } from "~/components/common/section-headers";
 import { ServicePeriodTabs } from "~/components/pages/service-periods/headers";
 import { protectedRoute } from "~/lib/auth/auth.server";
 
