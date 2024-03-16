@@ -47,7 +47,7 @@ const mutation = () => makeDomainFunction(schema)
 
     const serviceListId = await serviceListsDb.create({
       ...serviceListData,
-      serviceType: "FoodBoxOrder",
+      service_type: "FoodBoxOrder",
     })
 
     return { status: "success", serviceListData, serviceListId }
