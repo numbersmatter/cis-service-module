@@ -126,7 +126,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     programAreaName: "CIS - Food Pantry"
   }
 
-  const seatPromises = serviceList.seatsArray.map((seat) => {
+  const seatPromises = serviceList.seats_array.map((seat) => {
     const seatData = seatsDb.read(seat)
     return seatData
   });
@@ -136,11 +136,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const seats = seatReads
     .filter((seat) => seat !== undefined).map((seat) => seat!);
 
-  const baseUrl = `/service-lists/${listID}`
+  const baseUrl = `/service-lists/${listID}/preparing`
 
   const steps: Step[] = [
-    { id: 'items', name: 'Menu Items', to: `${baseUrl}/items`, status: 'complete' },
-    { id: 'seat', name: 'Seat Selection', to: `${baseUrl}/seats`, status: 'current' },
+    { id: 'items', name: 'Menu Items', to: `${baseUrl}`, status: 'current' },
+    { id: 'seat', name: 'Seat Selection', to: `${baseUrl}/seats`, status: 'upcoming' },
     { id: 'preview', name: 'Preview', to: `${baseUrl}/preview`, status: 'upcoming' },
   ];
 

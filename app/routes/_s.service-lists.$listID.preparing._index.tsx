@@ -126,30 +126,19 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     programAreaName: "CIS - Food Pantry"
   }
 
-  const seatPromises = serviceList.seatsArray.map((seat) => {
-    const seatData = seatsDb.read(seat)
-    return seatData
-  });
-
-  const seatReads = await Promise.all(seatPromises);
-
-  const seats = seatReads
-    .filter((seat) => seat !== undefined).map((seat) => seat!);
 
 
 
 
-
-
-  const baseUrl = `/service-lists/${listID}`
+  const baseUrl = `/service-lists/${listID}/preparing`
 
   const steps: Step[] = [
-    { id: 'items', name: 'Menu Items', to: `${baseUrl}/items`, status: 'current' },
+    { id: 'items', name: 'Menu Items', to: `${baseUrl}`, status: 'current' },
     { id: 'seat', name: 'Seat Selection', to: `${baseUrl}/seats`, status: 'upcoming' },
     { id: 'preview', name: 'Preview', to: `${baseUrl}/preview`, status: 'upcoming' },
   ];
 
-  return json({ user, headerData, serviceList, steps, seats });
+  return json({ user, headerData, serviceList, steps });
 };
 
 
@@ -211,7 +200,7 @@ export default function Route() {
         </CardHeader>
         <DataTable
           columns={serviceListItemsCols}
-          data={data.serviceList.serviceItems}
+          data={data.serviceList.service_items}
         />
         <CardFooter className="py-2">
           <FormDialog>

@@ -27,14 +27,14 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     return redirect(`/service-lists/${listID}`)
   }
 
-  const serviceType = serviceList.serviceType;
-  const numberOfRecords = serviceList.seatsArray.length;
-  const baseUrl = `/service-lists/${listID}`
+  const serviceType = serviceList.service_type;
+  const numberOfRecords = serviceList.seats_array.length;
+  const baseUrl = `/service-lists/${listID}/preparing`
 
   const steps: Step[] = [
-    { id: 'items', name: 'Menu Items', to: `${baseUrl}/items`, status: 'complete' },
-    { id: 'seat', name: 'Seat Selection', to: `${baseUrl}/seats`, status: 'complete' },
-    { id: 'preview', name: 'Preview', to: `${baseUrl}/preview`, status: 'current' },
+    { id: 'items', name: 'Menu Items', to: `${baseUrl}`, status: 'current' },
+    { id: 'seat', name: 'Seat Selection', to: `${baseUrl}/seats`, status: 'upcoming' },
+    { id: 'preview', name: 'Preview', to: `${baseUrl}/preview`, status: 'upcoming' },
   ];
 
   return json({ serviceType: "Food Box Request", numberOfRecords, steps, listID });
@@ -52,12 +52,12 @@ const mutation = makeDomainFunction(schema)(
       throw new Response("Service List not found", { status: 404 })
     }
 
-    const transactionValue = calculateTotalValue(serviceList.serviceItems)
+    const transactionValue = calculateTotalValue(serviceList.service_items)
 
-    const transaction_promises = serviceList.seatsArray.map(async (seat) => {
+    const transaction_promises = serviceList.seats_array.map(async (seat) => {
       // create transaction
       const transactionData: ServiceTransaction = {
-        service_type: serviceList.serviceType,
+        service_type: serviceList.service_type,
         status: "pending",
         delivered_to: seat,
         service_created_data: new Date(),

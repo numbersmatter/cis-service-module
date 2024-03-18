@@ -33,6 +33,20 @@ export interface ServiceListDbModel extends ServiceListBase {
   applied_date: Timestamp | FieldValue;
 }
 
+export interface ServiceListOLDDbModel {
+  id: ServiceListId;
+  name: string;
+  description: string;
+  service_period_id: ServicePeriodId;
+  service_period: ServicePeriod;
+  seatsArray: SeatId[];
+  serviceType: ServiceTransactionType;
+  serviceItems: ItemLine[];
+  status: ListStatus;
+  created_date: Timestamp | FieldValue;
+  applied_date: Timestamp | FieldValue;
+}
+
 export interface ServiceListAdd {
   name: string;
   description: string;

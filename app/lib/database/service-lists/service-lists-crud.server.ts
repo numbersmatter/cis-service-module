@@ -98,7 +98,7 @@ const addItem = async (id: ServiceListId, item: ItemLine) => {
   };
   const docRef = serviceLists_collection().doc(id);
   await docRef.update({
-    serviceItems: FieldValue.arrayUnion(addItem),
+    service_items: FieldValue.arrayUnion(addItem),
   });
 };
 
