@@ -1,10 +1,7 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
-import { Fragment, useState } from 'react'
-import { ContainerPadded } from "~/components/common/containers";
 import { protectedRoute } from "~/lib/auth/auth.server";
-import { Form, isRouteErrorResponse, Outlet, useActionData, useLoaderData, useRouteError } from "@remix-run/react";
-import DataCards from "~/components/pages/home/data-cards";
+import { Form, isRouteErrorResponse, Outlet, useActionData, useFetcher, useLoaderData, useRouteError } from "@remix-run/react";
 import {
   Card,
   CardContent,
@@ -13,26 +10,22 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/shadcn/ui/card"
-import { Input } from "~/components/shadcn/ui/input"
-import { Label } from "~/components/shadcn/ui/label"
 
 import { RouteError, StandardError } from "~/components/common/ErrorPages";
 import { serviceListsDb } from "~/lib/database/service-lists/service-lists-crud.server";
 import ProgressPanels, { Step } from "~/components/common/progress-panels";
-import { ServiceListProgress } from "~/components/pages/service-lists/service-list-tabs";
-import { ProgressTabsContent } from "~/components/shadcn/ui/tabs-progress";
-import { Button } from "~/components/shadcn/ui/button";
-import { FoodBoxRequestInvoiceTable } from "~/components/pages/service-transactions/service-invoice";
 import { FoodBoxOrder } from "~/lib/database/food-box-order/types/food-box-order-model";
 import { DataTable } from "~/components/display/data-table";
-import { serviceListItemsCols } from "~/lib/database/service-lists/tables";
-import { FormDialog } from "~/components/common/form-dialog";
-import { performMutation } from "remix-forms";
 import { z } from "zod";
-import { makeDomainFunction } from "domain-functions";
-import { ItemLine } from "~/lib/value-estimation/types/item-estimations";
-import { seatsOfServiceList } from "~/lib/database/seats/seats-tables";
+import { seatsOfServicePeriod } from "~/lib/database/seats/seats-tables";
 import { seatsDb } from "~/lib/database/seats/seats-crud.server";
+import { useState } from "react";
+import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { SelectSeatsTable } from "~/components/pages/service-lists/seats-table";
+import { Button } from "~/components/shadcn/ui/button";
+import { makeDomainFunction } from "domain-functions";
+import { ServiceListId } from "~/lib/database/service-lists/types";
+import { performMutation } from "remix-forms";
 
 const schema = z.object({
   item_name: z.string(),
@@ -40,72 +33,58 @@ const schema = z.object({
   value: z.number(),
 })
 
-const removeSchema = z.object({
-  item_id: z.string(),
-  item_name: z.string(),
-  quantity: z.number(),
-  value: z.number(),
-  actionType: z.literal("removeItem")
+const seatMutSchema = z.object({
+  seatID: z.string().length(20),
+  actionType: z.enum(["addSeat", "removeSeat"])
 })
 
-const removeMutation = (service_list_id: string) => makeDomainFunction(removeSchema)(
-  (async (values) => {
-    const removeItem: ItemLine = {
-      item_name: values.item_name,
-      quantity: values.quantity,
-      value: values.value,
-      type: "individual-items",
-      item_id: values.item_id
-    }
-    await serviceListsDb.removeItem(service_list_id, removeItem)
-    return { status: "success", values }
-  })
-)
-
-const mutation = (service_list_id: string) => makeDomainFunction(schema)(
-  (async (values) => {
-
-    const newItemLine: ItemLine = {
-      item_name: values.item_name,
-      quantity: values.quantity,
-      value: values.value,
-      type: "individual-items",
-      item_id: "new-item-id"
+const addMutation = (listId: ServiceListId) => makeDomainFunction(seatMutSchema)(
+  async ({ seatID }) => {
+    const seat = await seatsDb.read(seatID);
+    if (!seat) {
+      return {
+        status: 404,
+        message: "Seat not found"
+      }
     }
 
-    await serviceListsDb.addItem(service_list_id, newItemLine)
+    await serviceListsDb.addSeat(listId, seatID);
 
+    return {
+      status: 200,
+      message: "Seat added"
+    }
 
-    return { status: "success", values }
-  })
+  }
+)
+const removeMutation = (listId: ServiceListId) => makeDomainFunction(seatMutSchema)(
+  async ({ seatID }) => {
+    const seat = await seatsDb.read(seatID);
+    if (!seat) {
+      return {
+        status: 404,
+        message: "Seat not found"
+      }
+    }
+
+    await serviceListsDb.removeSeat(listId, seatID);
+
+    return {
+      status: 200,
+      message: "Seat removed"
+    }
+
+  }
 )
 
-const foodBoxRequest: FoodBoxOrder = {
-  id: "1",
-  photo_url: "",
-  notes: "",
-  value_estimation_process: "other",
-  value_estimation_type: "other",
-  delivery_method: 'DoorDash',
-  items: [
-    {
-      item_id: "fdsfef",
-      item_name: "March 1, 2024 Menu Box",
-      value: 7000,
-      quantity: 1,
-      type: "menu-box"
-    },
-    {
-      item_id: "fdfac",
-      item_name: "Bread Item",
-      value: 300,
-      quantity: 1,
-      type: "individual-items"
-    },
+interface SeatBox {
+  family_name: string;
+  enrolled_date: Date;
+  number_of_members: number;
+  id: string;
+  status: "added" | "notAdded"
 
-  ],
 }
-
 
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -126,6 +105,18 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     programAreaName: "CIS - Food Pantry"
   }
 
+  const allSeats = await seatsDb.query();
+
+  const seatsStatus = allSeats.map((seat) => {
+    return {
+      id: seat.id,
+      family_name: seat.family_name,
+      enrolled_date: seat.enrolled_date,
+      number_of_members: 1,
+      status: serviceList.seats_array.includes(seat.id) ? "added" : "notAdded"
+    } as SeatBox
+  })
+
   const seatPromises = serviceList.seats_array.map((seat) => {
     const seatData = seatsDb.read(seat)
     return seatData
@@ -144,7 +135,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     { id: 'preview', name: 'Preview', to: `${baseUrl}/preview`, status: 'upcoming' },
   ];
 
-  return json({ user, headerData, serviceList, steps, seats });
+  return json({ user, headerData, steps, seats, allSeats, seatsStatus });
 };
 
 
@@ -164,40 +155,41 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     throw new Response("Action Type not found", { status: 400 });
   }
 
-  if (actionType === "addItem") {
-
+  if (actionType === "addSeat") {
     const result = await performMutation({
       request,
-      schema,
-      mutation: mutation(listID)
-    })
+      schema: seatMutSchema,
+      mutation: addMutation(listID),
+    });
 
-    return json({ result });
+    return result;
   }
 
-  if (actionType === "removeItem") {
+  if (actionType === "removeSeat") {
     const result = await performMutation({
       request,
-      schema: removeSchema,
-      mutation: removeMutation(listID)
-    })
+      schema: seatMutSchema,
+      mutation: removeMutation(listID),
+    });
 
-    return json({ result });
+    return result;
   }
+
 
   return json({ message: "No action performed" })
 };
 
 
 export default function Route() {
-  const { steps, serviceList, seats } = useLoaderData<typeof loader>();
+  const { steps, seats, allSeats, seatsStatus } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+  const [rowSelection, setRowSelection] = useState<string[]>([]);
 
   const handleTabChange = (value: string) => {
     console.log("value", value)
   }
 
-  const seatsData = seats.map((seat) => {
+  const seatsData = allSeats.map((seat) => {
     const { unenrolled_date, ...rest } = seat
     return {
       ...rest,
@@ -205,7 +197,15 @@ export default function Route() {
       enrolled_date: new Date(seat.enrolled_date),
       created_date: new Date(seat.created_date),
       updated_date: new Date(seat.updated_date),
+      number_of_members: 1,
     }
+  })
+
+  const table = useReactTable({
+    columns: seatsOfServicePeriod,
+    data: seatsData,
+    getCoreRowModel: getCoreRowModel(),
+    getRowId: (row) => row.id,
   })
 
 
@@ -215,22 +215,97 @@ export default function Route() {
       <Card>
         <CardHeader>
           <CardTitle>Seat Selection</CardTitle>
-          <CardDescription>
-            Select the seats for this service list.
-          </CardDescription>
+          <div className="flex flex-row justify-between">
+            <CardDescription>
+              Select the seats for this service list.
+            </CardDescription>
+
+          </div>
         </CardHeader>
         <CardContent>
           <p>Seat Selection</p>
-          <DataTable
-            columns={seatsOfServiceList}
-            data={seatsData}
-          />
+          <div className="flex flex-col gap-2">
+            {
+              seatsStatus.map((seat) => {
+
+                const data = {
+                  family_name: seat.family_name,
+                  enrolled_date: new Date(seat.enrolled_date),
+                  number_of_members: 1,
+                  id: seat.id,
+                  status: seat.status
+                }
+                return (
+                  <AddSeatBox key={seat.id} seat={data} />
+                )
+              })
+
+            }
+
+          </div>
         </CardContent>
       </Card>
-      <pre>{JSON.stringify(serviceList, null, 2)} </pre>
+      <pre>{JSON.stringify({}, null, 2)} </pre>
     </>
   )
 }
+
+function AddSeatBox({ seat }: { seat: SeatBox }) {
+
+  const fetcher = useFetcher();
+
+  const fetching = fetcher.state !== "idle" ? true : false;
+
+  const seatStatus = fetching ? "pending" : seat.status;
+
+  const seatClasses: {
+    "pending": string,
+    "added": string,
+    "notAdded": string
+  } = {
+    "pending": "bg-yellow-400",
+    "added": "bg-green-400",
+    "notAdded": ""
+  }
+
+
+  return (
+    <Card className={seatClasses[seatStatus]}>
+      <CardHeader>
+        <CardTitle>{seat.family_name}</CardTitle>
+        <CardDescription>
+          {seat.enrolled_date.toLocaleDateString()}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        {
+          seatStatus === "added" && (
+            <fetcher.Form method="post" className="flex flex-row gap-2">
+              <input hidden readOnly name="actionType" value="removeSeat" />
+              <input hidden readOnly name="seatID" value={seat.id} />
+              <Button variant="destructive" type="submit">
+                Remove Seat
+              </Button>
+            </fetcher.Form>
+          )
+        }
+        {
+          seatStatus === "notAdded" &&
+          <fetcher.Form method="post" className="flex flex-row gap-2">
+            <input hidden readOnly name="actionType" value="addSeat" />
+            <input hidden readOnly name="seatID" value={seat.id} />
+            <Button variant="secondary" type="submit">
+              Add Seat
+            </Button>
+          </fetcher.Form>
+        }
+
+      </CardContent>
+    </Card>
+  )
+
+}
+
 
 
 export function ErrorBoundary() {

@@ -54,19 +54,6 @@ export const seatsOfServiceList: ColumnDef<Seat>[] =
 export const seatsOfServicePeriod: ColumnDef<ServicePeriodSeatsCols>[] =
   [
     {
-      // id: "select",
-      // header: ({ table }) => {
-      //   return (
-      //     <IndeterminateCheckbox
-      //       {...{
-      //         checked: table.getIsAllRowsSelected(),
-      //         indeterminate: table.getIsSomeRowsSelected(),
-      //         onChange: table.getToggleAllRowsSelectedHandler(),
-
-      //       }}
-      //     />
-      //   )
-      // },
       id: "select",
       header: ({ table }) => (
         <Checkbox

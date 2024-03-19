@@ -91,10 +91,17 @@ const queryByString = async (field: keyof Seat, value: string) => {
   return querySnapshot.docs.map((doc) => doc.data());
 };
 
+// TODO: if no value is passed, return all seats
+const query = async () => {
+  const querySnapshot = await seats_collection().get();
+  return querySnapshot.docs.map((doc) => doc.data());
+};
+
 export const seatsDb = {
   create,
   read,
   update,
   remove,
   queryByString,
+  query,
 };

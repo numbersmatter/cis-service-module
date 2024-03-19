@@ -109,6 +109,20 @@ const removeItem = async (id: ServiceListId, item: ItemLine) => {
   });
 };
 
+const addSeat = async (id: ServiceListId, seatIDs: string) => {
+  const docRef = serviceLists_collection().doc(id);
+  await docRef.update({
+    seats_array: FieldValue.arrayUnion(seatIDs),
+  });
+};
+
+const removeSeat = async (id: ServiceListId, seatId: string) => {
+  const docRef = serviceLists_collection().doc(id);
+  await docRef.update({
+    seats_array: FieldValue.arrayRemove(seatId),
+  });
+};
+
 export const serviceListsDb = {
   create,
   read,
@@ -117,4 +131,6 @@ export const serviceListsDb = {
   getAll,
   addItem,
   removeItem,
+  addSeat,
+  removeSeat,
 };
