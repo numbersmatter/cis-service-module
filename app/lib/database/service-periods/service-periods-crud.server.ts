@@ -7,7 +7,7 @@ import {
   WithFieldValue,
   getFirestore,
 } from "firebase-admin/firestore";
-import { cis_t_Db, dataPoint } from "../firebase.server";
+import { cis_t_Db, dataPoint } from "../firestore.server";
 import {
   ServicePeriod,
   ServicePeriodDbModel,

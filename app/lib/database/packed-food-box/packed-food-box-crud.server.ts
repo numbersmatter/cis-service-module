@@ -9,7 +9,7 @@ import {
   PackedFoodBox,
   PackedFoodBoxDbModel,
 } from "./types/packed-food-box-model";
-import { cis_t_Db } from "../firebase.server";
+import { cis_t_Db } from "../firestore.server";
 
 function packedFoodBoxtoDbModel(
   packedFoodBox: PackedFoodBox

@@ -5,7 +5,7 @@ import {
   QueryDocumentSnapshot,
   getFirestore,
 } from "firebase-admin/firestore";
-import { cis_t_Db } from "../firebase.server";
+import { cis_t_Db } from "../firestore.server";
 import { PersonAdd, PersonAppModel, PersonDbModel } from "./types";
 
 const personToDbModel = (person: PersonAppModel): PersonDbModel => {

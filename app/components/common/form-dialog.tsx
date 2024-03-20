@@ -22,3 +22,19 @@ export function FormDialogVer1({ children }: { children?: React.ReactNode }) {
     </Dialog>
   )
 }
+
+
+export function FormDialog({ children, addButton }: { children?: React.ReactNode, addButton: React.ReactNode }) {
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        {addButton}
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[550px]">
+        {children}
+      </DialogContent>
+    </Dialog>
+  )
+
+}

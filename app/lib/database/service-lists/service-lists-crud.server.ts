@@ -15,7 +15,7 @@ import {
   ServiceListDbModel,
   ServiceListId,
 } from "./types";
-import { cis_t_Db } from "../firebase.server";
+import { cis_t_Db } from "../firestore.server";
 import { ItemLine } from "~/lib/value-estimation/types/item-estimations";
 
 // function toFirestore

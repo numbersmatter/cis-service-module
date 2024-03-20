@@ -10,7 +10,7 @@ import {
   ServiceTransaction,
   ServiceTransactionDbModel,
 } from "./types/service-trans-model";
-import { cis_t_Db } from "../firebase.server";
+import { cis_t_Db } from "../firestore.server";
 
 // function toFirestore
 

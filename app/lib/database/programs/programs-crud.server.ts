@@ -1,4 +1,4 @@
-import { cis_t_Db, fireDb } from "../firebase.server";
+import { cis_t_Db, fireDb } from "../firestore.server";
 import { Program, ProgramDbModel } from "./types";
 
 const programsToDbModel = (program: Program): ProgramDbModel => {
