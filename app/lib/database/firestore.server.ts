@@ -3,6 +3,7 @@ import { getFirestore } from "firebase-admin/firestore";
 import { programsDb } from "./programs/programs-crud.server";
 import { programAreaDb } from "./program-area/program-area-crud.server";
 import { servicePeriodsDb } from "./service-periods/service-periods-crud.server";
+import { staffDb } from "./staff/staff-crud.server";
 
 // helper function to firestore data to typescript
 const converter = <T>() => ({
@@ -34,10 +35,12 @@ export const cis_t_Db = {
   persons: "/nonprofits/cist/persons",
   families: "/nonprofits/cist/families",
   service_list: "/nonprofits/cist/service_lists",
+  staff: "/nonprofits/cist/staff",
 };
 
 export const db = {
   programs: programsDb,
   program_areas: programAreaDb,
   service_period: servicePeriodsDb,
+  staff: staffDb,
 };

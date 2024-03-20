@@ -8,19 +8,29 @@ import { FormTextArea } from "~/components/forms/text-area";
 import { Button } from "~/components/shadcn/ui/button";
 import { z } from "zod";
 import { protectedRoute } from "~/lib/auth/auth.server";
+import { makeDomainFunction } from "domain-functions";
 
 
 
 const schema = z.object({
   language: z.enum(["en", "es"]),
-  household_adults: z.coerce.number(),
-  household_children: z.coerce.number(),
-  primary_children: z.coerce.number(),
-  elementary_children: z.coerce.number(),
-  middle_children: z.coerce.number(),
-  high_children: z.coerce.number(),
+  household_adults: z.coerce.number().positive().int(),
+  household_children: z.coerce.number().positive().int(),
+  primary_children: z.coerce.number().positive().int(),
+  elementary_children: z.coerce.number().positive().int(),
+  middle_children: z.coerce.number().positive().int(),
+  high_children: z.coerce.number().positive().int(),
   notes: z.string(),
 })
+
+const mutation = makeDomainFunction(schema)(
+  async (data) => {
+    console.log(data);
+
+
+    return { status: "success" }
+  }
+)
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   let { user } = await protectedRoute(request);
