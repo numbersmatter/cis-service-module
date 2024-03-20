@@ -26,7 +26,7 @@ import { FoodBoxRequestInvoiceTable } from "~/components/pages/service-transacti
 import { FoodBoxOrder } from "~/lib/database/food-box-order/types/food-box-order-model";
 import { DataTable } from "~/components/display/data-table";
 import { serviceListItemsCols } from "~/lib/database/service-lists/tables";
-import { FormDialog } from "~/components/common/form-dialog";
+import { FormDialogVer1 } from "~/components/common/form-dialog";
 import { performMutation } from "remix-forms";
 import { z } from "zod";
 import { makeDomainFunction } from "domain-functions";
@@ -203,7 +203,7 @@ export default function Route() {
           data={data.serviceList.service_items}
         />
         <CardFooter className="py-2">
-          <FormDialog>
+          <FormDialogVer1>
             <Form method="post">
               <Card>
                 <CardHeader>
@@ -231,7 +231,7 @@ export default function Route() {
                 </CardFooter>
               </Card>
             </Form>
-          </FormDialog>
+          </FormDialogVer1>
         </CardFooter>
       </Card>
 

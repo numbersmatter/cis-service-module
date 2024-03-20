@@ -8,11 +8,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/shadcn/ui/dialog"
-import { Input } from "~/components/shadcn/ui/input"
-import { Label } from "~/components/shadcn/ui/label"
-import { AddItemTabs } from "../shadcn/compound/add-item-tabs"
 
-export function FormDialog({ children }: { children?: React.ReactNode }) {
+
+export function FormDialogVer1({ children }: { children?: React.ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>

@@ -4,7 +4,7 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { CalendarDaysIcon, CreditCardIcon } from "lucide-react";
 import { ContainerPadded } from "~/components/common/containers";
-import { FormDialog } from "~/components/common/form-dialog";
+import { FormDialogVer1 } from "~/components/common/form-dialog";
 import ServiceTransactionHeader from "~/components/pages/service-transactions/headers";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { FoodBoxOrder } from "~/lib/database/food-box-order/types/food-box-order-model";
@@ -217,7 +217,7 @@ export default function ServiceTransactionServiceIDRoute() {
               </tbody>
             </table>
             <div className="mt-6 border-t border-gray-900/5 pt-6">
-              <FormDialog />
+              <FormDialogVer1 />
             </div>
           </div>
 

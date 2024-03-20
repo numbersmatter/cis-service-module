@@ -1,4 +1,4 @@
-import { FormDialog } from "~/components/common/form-dialog";
+import { FormDialogVer1 } from "~/components/common/form-dialog";
 import ServiceTransactionHeader from "./headers";
 import { ServiceTransaction, ServiceTransactionValue } from "~/lib/database/service-transactions/types/service-trans-model";
 import { CalendarDaysIcon, CreditCardIcon, UserCircleIcon } from "@heroicons/react/20/solid";
@@ -105,7 +105,7 @@ export function ServiceInvoice({
               </tbody>
             </table>
             <div className="mt-6 border-t border-gray-900/5 pt-6">
-              <FormDialog />
+              <FormDialogVer1 />
             </div>
           </div>
 

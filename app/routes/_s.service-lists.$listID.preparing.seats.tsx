@@ -105,7 +105,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     programAreaName: "CIS - Food Pantry"
   }
 
-  const allSeats = await seatsDb.query();
+  const allSeats = await seatsDb.queryByString("service_period_id", serviceList.service_period_id);
 
   const seatsStatus = allSeats.map((seat) => {
     return {

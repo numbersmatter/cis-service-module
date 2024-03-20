@@ -6,7 +6,7 @@ import { Button } from "~/components/shadcn/ui/button";
 import { performMutation } from "remix-forms";
 import { z } from "zod";
 import { ContainerPadded } from "~/components/common/containers";
-import { FormDialog } from "~/components/common/form-dialog";
+import { FormDialogVer1 } from "~/components/common/form-dialog";
 import { HeaderTabs, SectionHeader, TabOption } from "~/components/common/header-tabs";
 import { DataTable } from "~/components/display/data-table";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/shadcn/ui/card";
@@ -82,7 +82,7 @@ export default function ProgramIDRouteServicePeriods() {
 
       <HeaderTabs tabs={tabs} baseUrl={baseUrl} defaultTab="service-periods" />
       <div className="mt-6 flex flex-row justify-between">
-        <FormDialog>
+        <FormDialogVer1>
           <Form method="post">
             <Card>
               <CardHeader>
@@ -112,7 +112,7 @@ export default function ProgramIDRouteServicePeriods() {
               </CardFooter>
             </Card>
           </Form>
-        </FormDialog>
+        </FormDialogVer1>
       </div>
       <div className="mt-6" />
       <DataTable columns={servicePeriodsOfProgramColumns} data={servicePeriodTableData} />
