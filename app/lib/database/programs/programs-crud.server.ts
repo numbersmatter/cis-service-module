@@ -3,7 +3,7 @@ import { Program, ProgramDbModel } from "./types";
 
 const programsToDbModel = (program: Program): ProgramDbModel => {
   return {
-    program_area: program.program_area,
+    program_area_id: program.program_area_id,
     name: program.name,
     criteria: program.criteria,
   };
@@ -16,7 +16,7 @@ const programConverter = {
     const data = snapshot.data();
     return {
       id: snapshot.id,
-      program_area: data.program_area,
+      program_area_id: data.program_area,
       name: data.name,
       criteria: data.criteria,
     } as Program;
