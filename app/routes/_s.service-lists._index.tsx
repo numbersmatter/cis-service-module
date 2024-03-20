@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useActionData, useLoaderData } from "@remix-run/react";
 import { SectionHeaderWithAddAction } from "~/components/common/section-headers";
 import { SingleButtonForm } from "~/components/common/single-button-form";
 import { DataTable } from "~/components/display/data-table";
@@ -31,7 +31,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Route() {
   let { serviceLists } = useLoaderData<typeof loader>();
-  const actionData = useLoaderData<typeof action>();
+  const actionData = useActionData<typeof action>();
 
 
   return (

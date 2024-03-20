@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { makeDomainFunction } from "domain-functions";
 import { performMutation } from "remix-forms";
 import { z } from "zod";
@@ -78,7 +78,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Route() {
   const { programs, programAreaOptions } = useLoaderData<typeof loader>();
-  const actionData = useLoaderData<typeof action>();
+  const actionData = useActionData<typeof action>();
 
 
   const errors = {

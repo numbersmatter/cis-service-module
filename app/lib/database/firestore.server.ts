@@ -2,6 +2,7 @@ import type { QueryDocumentSnapshot } from "firebase-admin/firestore";
 import { getFirestore } from "firebase-admin/firestore";
 import { programsDb } from "./programs/programs-crud.server";
 import { programAreaDb } from "./program-area/program-area-crud.server";
+import { servicePeriodsDb } from "./service-periods/service-periods-crud.server";
 
 // helper function to firestore data to typescript
 const converter = <T>() => ({
@@ -38,4 +39,5 @@ export const cis_t_Db = {
 export const db = {
   programs: programsDb,
   program_areas: programAreaDb,
+  service_period: servicePeriodsDb,
 };
