@@ -12,7 +12,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   let { user } = await protectedRoute(request);
   const areaID = params.areaID ?? "areaID";
   const programArea = await getProgramArea(areaID);
-  const programArea_Programs = await programsDb.queryBy("program_area", areaID);
+  const programArea_Programs = await programsDb.queryBy("program_area_id", areaID);
   return json({ programArea, programArea_Programs });
 };
 

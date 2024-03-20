@@ -13,7 +13,6 @@ import { Button } from "~/components/shadcn/ui/button";
 import { DialogFooter, DialogHeader, DialogTitle } from "~/components/shadcn/ui/dialog";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { db } from "~/lib/database/firestore.server";
-import { programsDb } from "~/lib/database/programs/programs-crud.server";
 import { programsOfAreaColumns } from "~/lib/database/programs/tables";
 
 
