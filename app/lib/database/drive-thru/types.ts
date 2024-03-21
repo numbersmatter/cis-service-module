@@ -1,8 +1,8 @@
-export interface DriveThruForm {
-  form_id: string;
+export interface DriveThruFormDbModel {
   staff_id: string;
   staff_name: string;
   created_date: Date;
+  updated_date: Date;
   form_responses: {
     language: string;
     household_adults: number;
@@ -13,4 +13,8 @@ export interface DriveThruForm {
     high_children: number;
     notes: string;
   };
+}
+
+export interface DriveThruForm extends DriveThruFormDbModel {
+  id: string;
 }

@@ -4,6 +4,8 @@ import { programsDb } from "./programs/programs-crud.server";
 import { programAreaDb } from "./program-area/program-area-crud.server";
 import { servicePeriodsDb } from "./service-periods/service-periods-crud.server";
 import { staffDb } from "./staff/staff-crud.server";
+import { familyDb } from "./families/family-crud.server";
+import { driveFormDb } from "./drive-thru/drive-thru-crud.server";
 
 // helper function to firestore data to typescript
 const converter = <T>() => ({
@@ -36,6 +38,8 @@ export const cis_t_Db = {
   families: "/nonprofits/cist/families",
   service_list: "/nonprofits/cist/service_lists",
   staff: "/nonprofits/cist/staff",
+  drive_thru: "/nonprofits/cist/drive_thru",
+  hello: "/nonprofits/cist/drive_thru",
 };
 
 export const db = {
@@ -43,4 +47,6 @@ export const db = {
   program_areas: programAreaDb,
   service_period: servicePeriodsDb,
   staff: staffDb,
+  families: familyDb,
+  drive_thru: driveFormDb,
 };
