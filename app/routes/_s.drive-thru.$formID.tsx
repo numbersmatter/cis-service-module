@@ -31,6 +31,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  let { user, staffData } = await protectedRoute(request);
+
   return null;
 };
 
