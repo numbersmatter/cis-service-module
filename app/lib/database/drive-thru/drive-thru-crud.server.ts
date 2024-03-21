@@ -39,8 +39,34 @@ const getAll = async () => {
   return data;
 };
 
+interface UpdateFormNumber {
+  formID: string;
+  fieldID: string;
+  value: number;
+}
+
+const updateFormNumber = async (updateData: UpdateFormNumber) => {
+  const updateField = `form_responses.${updateData.fieldID}`;
+
+  const doc = await driveThru_collection.doc(updateData.formID).update({
+    [updateField]: updateData.value,
+    updated_date: FieldValue.serverTimestamp(),
+  });
+  return doc;
+};
+
+const updateFormNotes = async (formID: string, notes: string) => {
+  const doc = await driveThru_collection.doc(formID).update({
+    "form_responses.notes": notes,
+    updated_date: FieldValue.serverTimestamp(),
+  });
+  return doc;
+};
+
 export const driveFormDb = {
   read,
   create,
   getAll,
+  updateFormNumber,
+  updateFormNotes,
 };
