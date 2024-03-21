@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { Form, json, useLoaderData } from "@remix-run/react"
+import { Form, json, redirect, useLoaderData } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/components/shadcn/ui/card";
 import { FormNumberField } from "~/components/forms/number-field";
@@ -9,6 +9,8 @@ import { Button } from "~/components/shadcn/ui/button";
 import { z } from "zod";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { makeDomainFunction } from "domain-functions";
+import { DriveThruForm, DriveThruFormDbModel } from "~/lib/database/drive-thru/types";
+import { performMutation } from "remix-forms";
 
 
 
@@ -23,12 +25,21 @@ const schema = z.object({
   notes: z.string(),
 })
 
-const mutation = makeDomainFunction(schema)(
+const mutation = (staff: { staff_name: string, staff_id: string }) => makeDomainFunction(schema)(
   async (data) => {
-    console.log(data);
+
+    const driveThruForm: DriveThruFormDbModel = {
+      staff_id: staff.staff_id,
+      staff_name: staff.staff_name,
+      created_date: new Date(),
+      updated_date: new Date(),
+      form_responses: data
+    }
+
+    // const driveThruFormId = await db.drive_thru.create(driveThruForm);
 
 
-    return { status: "success" }
+    return { status: "success", };
   }
 )
 
@@ -39,9 +50,20 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  let { user } = await protectedRoute(request);
+  let { user, staffData } = await protectedRoute(request);
 
-  return null;
+  const result = await performMutation({
+    request,
+    schema,
+    mutation: mutation({ staff_id: user.uid, staff_name: staffData.fname }),
+  });
+
+  if (!result.success) {
+    return json(result);
+  }
+
+  return redirect(`/drive-thru`);
+
 };
 
 

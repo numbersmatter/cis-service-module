@@ -35,6 +35,7 @@ export const cis_t_Db = {
   persons: "/nonprofits/cist/persons",
   families: "/nonprofits/cist/families",
   service_list: "/nonprofits/cist/service_lists",
+  drive_thru: "/nonprofits/cist/drive_thru",
   staff: "/nonprofits/cist/staff",
 };
 
@@ -43,4 +44,5 @@ export const db = {
   program_areas: programAreaDb,
   service_period: servicePeriodsDb,
   staff: staffDb,
+  // drive_thru: driveThruDb,
 };
