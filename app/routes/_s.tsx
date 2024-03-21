@@ -1,13 +1,11 @@
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { useLoaderData, isRouteErrorResponse, useRouteError, json, Outlet } from "@remix-run/react";
 import { StaffShell } from "~/components/shell/staff-shell";
-import { authenticator } from "~/lib/auth/auth.server";
+import { authenticator, protectedRoute } from "~/lib/auth/auth.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  let user = await authenticator.isAuthenticated(request, {
-    failureRedirect: "/login",
-  });
-  return json({ user });
+  let { user, staffData } = await protectedRoute(request);
+  return json({ user, staffData });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -19,7 +17,7 @@ export default function RouteComponent() {
 
 
   return (
-    <StaffShell>
+    <StaffShell staffData={data.staffData}>
       <div className="bg-slate-400 px-2 py-2 sm:px-2 md:py-2 lg:px-8">
         {/* Your content */}
         <div className="md:flex md:items-center md:justify-between">

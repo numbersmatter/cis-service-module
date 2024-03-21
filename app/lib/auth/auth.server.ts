@@ -9,13 +9,18 @@ export type AuthStrategy = (typeof AuthStrategies)[keyof typeof AuthStrategies];
 
 export let authenticator = new Authenticator<User>(sessionStorage);
 
+export interface StaffInfo {
+  fname: string;
+  lname: string;
+}
+
 export const protectedRoute = async (request: Request) => {
   let user = await authenticator.isAuthenticated(request, {
     failureRedirect: "/login",
   });
   const staff = await staffDb.read(user.uid);
 
-  const staffData = {
+  const staffData: StaffInfo = {
     fname: staff ? staff.fname : "no f name",
     lname: staff ? staff.lname : "no l name",
   };

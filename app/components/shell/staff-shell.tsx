@@ -6,6 +6,7 @@ import { Link, NavLink, Outlet } from '@remix-run/react';
 import LogoutButton from '../common/logout-button';
 import UserAvatar, { AppUser } from '../common/user-avatar';
 import { LogoImg } from './company-logo-img';
+import { StaffInfo } from '~/lib/auth/auth.server';
 
 
 const navigation = [
@@ -30,12 +31,12 @@ function classNames(...classes: string[]) {
 
 
 
-export function StaffShell({ children }: { children: ReactNode }) {
+export function StaffShell({ children, staffData }: { children: ReactNode, staffData: StaffInfo }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const appUser: AppUser = {
-    fname: 'Leonard',
-    lname: 'Lawson',
+    fname: staffData.fname,
+    lname: staffData.lname,
     email: 'leonard@verticalhydration.com',
     id: '1',
   }
