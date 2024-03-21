@@ -10,10 +10,7 @@ interface DriveThruFormCols {
 }
 
 export const driveThruTable: ColumnDef<DriveThruFormCols>[] = [
-  {
-    accessorKey: "staff_id",
-    header: "Staff ID",
-  },
+
   {
     accessorKey: "staff_name",
     header: "Staff Name",

@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { Form, json, useLoaderData } from "@remix-run/react"
+import { Form, json, redirect, useLoaderData } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/components/shadcn/ui/card";
 import { FormNumberField } from "~/components/forms/number-field";
@@ -9,6 +9,9 @@ import { Button } from "~/components/shadcn/ui/button";
 import { z } from "zod";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { makeDomainFunction } from "domain-functions";
+import { DriveThruDbAddModel, DriveThruFormDbModel } from "~/lib/database/drive-thru/types";
+import { performMutation } from "remix-forms";
+import { db } from "~/lib/database/firestore.server";
 
 
 
@@ -16,19 +19,25 @@ const schema = z.object({
   language: z.enum(["en", "es"]),
   household_adults: z.coerce.number().positive().int(),
   household_children: z.coerce.number().positive().int(),
-  primary_children: z.coerce.number().positive().int(),
-  elementary_children: z.coerce.number().positive().int(),
-  middle_children: z.coerce.number().positive().int(),
-  high_children: z.coerce.number().positive().int(),
+  primary_children: z.coerce.number().nonnegative().int(),
+  elementary_children: z.coerce.number().nonnegative().int(),
+  middle_children: z.coerce.number().nonnegative().int(),
+  high_children: z.coerce.number().nonnegative().int(),
   notes: z.string(),
 })
 
-const mutation = makeDomainFunction(schema)(
-  async (data) => {
-    console.log(data);
+const mutation = (staffData: { fname: string, lname: string, staff_id: string }) => makeDomainFunction(schema)(
+  async (values) => {
 
+    const data: DriveThruDbAddModel = {
+      staff_id: staffData.staff_id,
+      staff_name: `${staffData.fname} ${staffData.lname}`,
+      form_responses: values
+    }
 
-    return { status: "success" }
+    const writeResult = await db.drive_thru.create(data)
+
+    return { data }
   }
 )
 
@@ -39,9 +48,26 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  let { user } = await protectedRoute(request);
+  let { user, staffData } = await protectedRoute(request);
 
-  return null;
+  const staffInfo = {
+    fname: staffData.fname,
+    lname: staffData.lname,
+    staff_id: user.uid
+  }
+
+  const result = await performMutation({
+    request,
+    schema,
+    mutation: mutation(staffInfo),
+  })
+
+  if (!result.success) {
+    return json(result);
+  }
+
+
+  return redirect("/drive-thru");
 };
 
 
