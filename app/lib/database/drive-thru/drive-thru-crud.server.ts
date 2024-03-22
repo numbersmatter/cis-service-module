@@ -39,6 +39,22 @@ const getAll = async () => {
   return data;
 };
 
+const afterDate = async (date: Date) => {
+  const query = await driveThru_collection
+    .where("created_date", ">=", date)
+    .get();
+  const data: DriveThruForm[] = [];
+  query.forEach((doc) => {
+    data.push({
+      ...doc.data(),
+      id: doc.id,
+      created_date: doc.data().created_date.toDate(),
+      updated_date: doc.data().updated_date.toDate(),
+    } as DriveThruForm);
+  });
+  return data;
+};
+
 interface UpdateFormNumber {
   formID: string;
   fieldID: string;
@@ -69,4 +85,5 @@ export const driveFormDb = {
   getAll,
   updateFormNumber,
   updateFormNotes,
+  afterDate,
 };

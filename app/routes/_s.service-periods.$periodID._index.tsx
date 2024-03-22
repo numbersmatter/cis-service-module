@@ -1,6 +1,5 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import DataCards from "~/components/pages/home/data-cards";
 import { ServicePeriodTabs } from "~/components/pages/service-periods/headers";
 import { protectedRoute } from "~/lib/auth/auth.server";
 
@@ -20,7 +19,6 @@ export default function Route() {
     <main>
       <ServicePeriodTabs baseUrl={baseUrl} defaultTab="" />
       <div className="mt-6" />
-      <DataCards />
     </main>
   )
 }

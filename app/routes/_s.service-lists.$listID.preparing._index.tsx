@@ -4,7 +4,6 @@ import { Fragment, useState } from 'react'
 import { ContainerPadded } from "~/components/common/containers";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { Form, isRouteErrorResponse, Outlet, useActionData, useLoaderData, useRouteError } from "@remix-run/react";
-import DataCards from "~/components/pages/home/data-cards";
 import {
   Card,
   CardContent,

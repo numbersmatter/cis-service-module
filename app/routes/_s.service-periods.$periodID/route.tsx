@@ -14,7 +14,6 @@ import { Menu, Transition } from '@headlessui/react'
 import { ContainerPadded } from "~/components/common/containers";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { isRouteErrorResponse, Outlet, useLoaderData, useRouteError } from "@remix-run/react";
-import DataCards from "~/components/pages/home/data-cards";
 import { ServicePeriodHeader, ServicePeriodTabs } from "~/components/pages/service-periods/headers";
 import { RouteError, StandardError } from "~/components/common/ErrorPages";
 import { servicePeriodsDb } from "~/lib/database/service-periods/service-periods-crud.server";
