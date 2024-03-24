@@ -40,6 +40,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   const nonSchoolChildren = totalChildren - totalStudents;
 
+  const spanishSpeaking = driveThruData.filter((data) => data.form_responses.language === "es").length;
+
   const dashData = {
     totalFamilies,
     totalAdults,
@@ -49,7 +51,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     totalMiddle,
     totalHigh,
     totalStudents,
-    nonSchoolChildren
+    nonSchoolChildren,
+    spanishSpeaking,
   }
 
 
@@ -80,6 +83,7 @@ export default function StaffIndex() {
           { name: 'Non-School Children', stat: dashData.nonSchoolChildren.toString() },
           { name: 'Total Students', stat: dashData.totalStudents.toString() },
           { name: 'Total Adults', stat: dashData.totalAdults.toString() },
+          { name: 'Spanish Speaking Families', stat: dashData.spanishSpeaking.toString() },
         ]} />
       </div>
     </div>
