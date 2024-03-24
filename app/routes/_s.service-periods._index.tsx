@@ -21,19 +21,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Route() {
   const { servicePeriods } = useLoaderData<typeof loader>();
   return (
-    <div>
+    <div className="pb-10">
       <SectionHeaderWithAddAction title="Service Periods" addButton={<Button>Add service period</Button>} />
       <div className="mt-6" />
       <DataTable columns={servicePeriodsOfProgramColumns} data={servicePeriods} />
-      <ul>
-        {servicePeriods.map((sp) => (
-          <li key={sp.id}>
-            <Link to={sp.id}>
-              {sp.name}, {sp.description}
-            </Link>
-          </li>
-        ))}
-      </ul>
+
     </div>
   )
 }

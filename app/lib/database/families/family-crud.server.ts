@@ -55,8 +55,15 @@ const update = async (id: string, family: Partial<FamilyDbModel>) => {
   await familyCollRef.doc(id).update(family);
 };
 
+const getAll = async () => {
+  const familyCollRef = familyCollection();
+  const querySnapshot = await familyCollRef.get();
+  return querySnapshot.docs.map((doc) => doc.data());
+};
+
 export const familyDb = {
   create,
   read,
   update,
+  getAll,
 };
