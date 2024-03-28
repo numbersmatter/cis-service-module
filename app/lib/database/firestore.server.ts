@@ -32,20 +32,20 @@ if (!process.env.BASEPATH) {
 
 const basePath = process.env.BASEPATH;
 
-export const cis_t_Db = {
-  servicePeriods: `${basePath}/service_periods`,
-  seats: `${basePath}/seats`,
-  applications: `${basePath}/applications`,
-  service_transactions: `${basePath}/service_transactions`,
-  foodBoxOrders: `${basePath}/food_box_orders`,
-  packedFoodBoxes: `${basePath}/inventory/food_pantry/packed_food_boxes`,
-  programAreas: `${basePath}/program_areas`,
-  programs: `${basePath}/programs`,
-  persons: `${basePath}/persons`,
-  families: `${basePath}/families`,
-  service_list: `${basePath}/service_lists`,
-  staff: `${basePath}/staff`,
-  drive_thru: `${basePath}/drive_thru`,
+export const db_paths = {
+  servicePeriods: `${basePath}service_periods`,
+  seats: `${basePath}seats`,
+  applications: `${basePath}applications`,
+  service_transactions: `${basePath}service_transactions`,
+  foodBoxOrders: `${basePath}food_box_orders`,
+  packedFoodBoxes: `${basePath}inventory/food_pantry/packed_food_boxes`,
+  programAreas: `${basePath}program_areas`,
+  programs: `${basePath}programs`,
+  persons: `${basePath}persons`,
+  families: `${basePath}families`,
+  service_list: `${basePath}service_lists`,
+  staff: `${basePath}staff`,
+  drive_thru: `${basePath}drive_thru`,
 };
 
 export const db = {
